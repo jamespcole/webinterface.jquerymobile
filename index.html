@@ -4,284 +4,29 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>XBMC Remote</title>
-	<!--<link rel="stylesheet"  href="js/jquerymobile/jquery.mobile-1.1.0-rc.2.min.css" />-->
-	<!--<link rel="stylesheet"  href="js/jquerymobile/jquery.mobile-1.0.1.min.css" />-->
-	<link rel="stylesheet"  href="js/jquerymobile/jquery.mobile-1.2.0.min.css" />
-	<!--<link rel="stylesheet" href="docs/_assets/css/jqm-docs.css" />-->
-	<!--<script src="js/jquerymobile/jquery.js"></script>-->
-	<script src="js/jquerymobile/jquery-1.8.2.min.js"></script>
-	<!--<script src="js/jquerymobile/jquery.mobile-1.1.0-rc.2.min.js"></script>-->
-	<!--<script src="js/jquerymobile/jquery.mobile-1.0.1.min.js"></script>-->
-	<!--<script src="js/jquerymobile/jquery.mobile-1.0.1.js"></script>-->
-	<script src="js/jquerymobile/jquery.mobile-1.2.0.min.js"></script>
-	<!--<script src="js/jquery.mkf.js"></script>
-	<script src="js/lang/lang.en.js"></script>-->
-	<script src="js/lib.xbmc.js"></script>
 	
-	<style type="text/css">
-		.remote-buttons-container {
-			width:100% !important;
-			max-width:350px !important;
-		}
-
-		.remote-button {
-			width:33% !important;
-		}
-
-		@media all and (min-width: 480px) {
-		  .album_info {
-		  	display:inline-block;
-		    width: 30%;
-		    float: right;
-		    margin-right: 20px;
-		  }
-		  .album_info img {
-		  	width:100%;
-		  	margin-top:15px;
-		  }
-		  .album_songs {
-		    width: 65%;
-		    float: left;
-		    display:inline-block;
-		  }
-		}
-
-		@media all and (max-width: 479px) {
-		  .album_info {
-		    width: 100%;
-		  }
-		  .album_info img {
-		  	width:100%;
-		  }
-		  .album_songs {
-		    width: 100%;
-		  }
-
-		  #episode_info img {
-		  	width:100%;
-		  	margin-right:10px;
-		  }
-		}
-
-		.round-button {
-			width:70px;
-			height: 70px;
-			border-radius:100%;
-			background-color:grey;
-			text-align:center;
-			background-color: #DDD;
-			background-image: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#CCC));
-			background-image: -webkit-linear-gradient(top, #EEE, #CCC);
-			background-image: -moz-linear-gradient(top, #EEE, #CCC);
-			background-image: -ms-linear-gradient(top, #EEE, #CCC);
-			background-image: -o-linear-gradient(top, #EEE, #CCC);
-			background-image: linear-gradient(top, #EEE, #CCC);
-			border: 1px solid #777;
-			display:inline-block;
-			cursor:pointer;
-			cursor:hand;
-		}
-		.round-button:active {
-			position:relative;
-			top:3px;
-		}
-
-		.play-button {
-			width: 10px;
-			height: 0; 
-			border-top: 20px solid transparent;
-			border-bottom: 20px solid transparent;			
-			border-left: 30px solid white;
-			/*margin-top:15px;*/
-			margin-left:25px;
-			margin-right:0px;
-			position:relative;
-			top:18px;
-			margin-top:-5px;
-		}
-
-		.pause-button {
-			width: 10px; 
-			height: 40px; 
-			border-left: 10px solid white;		
-			border-right: 10px solid white;
-			margin-top:15px;
-			margin-left:20px;
-			margin-right:0px;
-		}
-
-		.ff-button {
-			padding-left:20px;
-			/*padding-top:5px;*/
-			position:relative;
-			top:20px;
-		}
-
-		.ff-button div {
-			width: 10px; 
-			height: 0; 
-			border-top: 15px solid transparent;
-			border-bottom: 15px solid transparent;			
-			border-left: 20px solid white;
-			/*margin-top:15px;*/
-			margin-right:0px;
-			display:inline-block;
-			margin-left:-10px;
-		}
-
-		.rw-button {
-			padding-left:0px;
-			/*padding-top:5px;*/
-			position:relative;
-			top:20px;
-		}
-
-		.rw-button div {
-			width: 10px; 
-			height: 0; 
-			border-top: 15px solid transparent;
-			border-bottom: 15px solid transparent;			
-			border-right: 20px solid white;
-			/*margin-top:15px;*/
-			margin-right:0px;
-			display:inline-block;
-			margin-left:-10px;
-		}
-
-		.home-button {
-			
-			/*padding-top:5px;*/
-			position:relative;
-			top:-5px;
-		}
-
-		.home-button div:first-child {
-			width: 0px;
-			height: 0; 
-			/*border-top: 20px solid transparent;*/
-			border-bottom: 15px solid white;			
-			border-left: 30px solid transparent;			
-			border-right: 30px solid transparent;
-			left:-40px;
-			position:relative;
-			top:-30px;
-			margin:45px;
-		}
-
-		.home-button div:last-child {
-			width: 10px;
-			height: 0; 
-			border-top: 15px solid white;
-			border-bottom: 15px solid white;			
-			border-left: 15px solid white;			
-			border-right: 15px solid white;
-			left:15px;
-			
-			position:relative;
-			top:-75px;
-		}
-
-		.up-button {
-			position:relative;
-			top:-5px;
-		}
-		.up-button div:first-child {
-			width: 0px;
-			height: 0; 
-			/*border-top: 25px solid transparent;*/
-			border-bottom: 35px solid white;			
-			border-left: 25px solid transparent;			
-			border-right: 25px solid transparent;
-			left:10px;
-			position:relative;
-			top:-44px;
-			margin-top: 62px;
-		}
-
-		.back-button {
-			position:relative;
-			top:-5px;
-		}
-		.back-button div:first-child {
-			width: 0px;
-			height: 0; 
-			border-top: 15px solid transparent;
-			border-bottom: 15px solid transparent;			
-			border-right: 15px solid white;
-			position:relative;
-			top:-12px;
-			margin-top: 29px;
-			left:10px;
-		}
-
-		.back-button div:last-child {
-			width: 20px;
-			height: 20px; 
-			border-top: 5px solid white;		
-			border-right: 5px solid white;
-			position:relative;
-			top:-30px;
-			margin-top: 0px;
-			left:20px;
-		}
-
-		.left-button {
-			position:relative;
-			top:-5px;
-		}
-		.left-button div:first-child {
-			width: 0px;
-			height: 0; 
-			border-top: 25px solid transparent;
-			border-bottom: 25px solid transparent;			
-			border-right: 35px solid white;
-			position:relative;
-			top:-12px;
-			margin-top: 29px;
-			left:10px;
-		}
-
-		.right-button {
-			position:relative;
-			top:-5px;
-		}
-		.right-button div:first-child {
-			width: 0px;
-			height: 0; 
-			border-top: 25px solid transparent;
-			border-bottom: 25px solid transparent;			
-			border-left: 35px solid white;
-			position:relative;
-			top:-12px;
-			margin-top: 29px;
-			left:10px;
-		}
-
-		.select-button {
-			position:relative;
-			top:-5px;
-		}
-		.select-button div:first-child {
-			width: 10px;
-			height: 10px; 
-			border:solid white 15px;
-			position:relative;
-			top:-18px;
-			margin-top: 38px;
-			left:15px;
-		}
-
-		.round-button-holder {
-			width:100%;
-			text-align:center;
-			margin-bottom:5px;
-		}
-
-	</style>
+	<link rel="stylesheet"  href="js/jquerymobile/jquery.mobile-1.2.0.min.css" />
+	<link rel="stylesheet"  href="css/style.css" />
+	
+	<script src="js/jquerymobile/jquery-1.8.2.min.js"></script>
+	<script src="js/jquerymobile/jquery.mobile-1.2.0.min.js"></script>
+	<script src="js/lib.xbmc.js"></script>
 
 	<script type="text/javascript">
-	var useCaching = true;
-	var volume = 0;
+	var useCaching = true;//cache large file lists - this speeds up load times
+	var volume = 0; //set initial volume - this will be updated volumeChanged function called by the volumeChangedListener
+	var debug = true;
+
+	function debugLog(obj, message)
+	{
+		if(debug)
+		{
+			if(message != '')
+				console.log(message);
+			if(obj != 'undefined')
+				console.log(obj);
+		}
+	}
 	
 		$('.music-link').live("tap", function(e)
 		{
@@ -292,7 +37,6 @@
 		{
 			e.preventDefault();
 			var file = $(e.target).attr('data-file');
-			//console.log(file);
 			//forward slashes mess up the query string so replace them 
 			//and change back later(even though they are valid jqmobile doesn't like them)
 			file = file.replace(/\//g, "\\");
@@ -381,8 +125,7 @@
 		$('.video-folder').live("taphold", function(e)
 		{
 			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//console.log(file);
+			var file = $(e.target).attr('data-file');			
 			//forward slashes mess up the query string so replace them 
 			//and change back later(even though they are valid jqmobile doesn't like them)
 			file = file.replace(/\//g, "\\");
@@ -424,18 +167,17 @@
 			 
 		});
 
-		
-		$('.video-link').live("tap", function(e)
+		$(document).on('tap', ".video-link", function(e)
 		{
 			var file = $(this).attr('data-file');
-			console.log("Playing " + file);
+			debugLog(null, "Playing " + file);
 			xbmc.playVideoFile({file:file});
 		});
 
 		$('.queue-video').live("tap", function(e)
 		{
 			var file = $(this).attr('data-file');
-			console.log("Queueing " + file);
+			debugLog(null, "Queueing " + file);
 			xbmc.addVideoFileToPlaylist({file: file, onError : showError});
 		});
 
@@ -479,7 +221,7 @@
 		$('.play-playlist-item').live("tap", function(event) {	
 				var category = 	$(this).attr('xbmc-category');
 				var index = $(this).attr('xbmc-index');
-				//console.log(category + ' ' + index);
+				
 				if(category == "music" || category == "audio")	
 					xbmc.playlistPlay({item: index});
 				else if(category == "video")	
@@ -494,35 +236,44 @@
 			xbmc.periodicUpdater.addCurrentlyPlayingChangedListener(playingChanged);
 			xbmc.periodicUpdater.addProgressChangedListener(progressChanged);
 			xbmc.periodicUpdater.start();
-			 $(".swipable").live('swiperight', function() {
+			//check if PVR is enabled
+			var bools = new Array();
+			bools[0] = "System.HasPVR";
+			bools[1] = "pvrmanager.enabled";
+			xbmc.getInfoBooleans({bool : bools, onSuccess: function(result) {
+				debugLog(result, "Checking if PVR is enabled");
+				if(result["System.HasPVR"] == false)
+					$('#PVR_menu_item').hide();
+				else
+					xbmc.pvrGetChannelGroups({onSuccess: function(result) {}, onError : function(error) {
+						$('#PVR_menu_item').hide();
+					}});	
+			}});
+			/* $(".swipable").live('swiperight', function() {
 				history.back();
 			  });
 			$(".swipable").live('swipeleft', function() {
 				history.forward();
-			  });
-			$(".play-toggle").live("click", function() {
+			  });*/
+			$(document).on('click', ".play-toggle", function() {
 				xbmc.control({'type' : 'play', onSuccess : togglePlayPauseButton})
 			});
 
-			$('.prev-button').live("click", function() {
+			$(document).on('click', ".prev-button", function() {
 				if(currentPlayType == "audio")
 					xbmc.control({type : 'prev'});
 				else
 					xbmc.input({type : 'Left'});
 			});
-
-			$('.next-button').live("click", function() {
+			$(document).on('click', ".next-button", function() {
 				if(currentPlayType == "audio")
 					xbmc.control({type : 'next'});
 				else
 					xbmc.input({type : 'Right', onError : showError});
-				console.log(currentPlayType);
 			});
 			//document.oncontextmenu = function() {return false;};
 			$.mobile.changePage(document.location.hash);
-			$.mobile.loading( 'hide' );
-			//alert(document.location.hash);
-			//console.log(document.location.hash);
+			$.mobile.loading( 'hide' );			
 		});
 
 		function togglePlayPauseButton()
@@ -540,10 +291,11 @@
 				}
 			});
 		}
+		//keeps track of the currently playing type
 		var currentPlayType = '';
 		function playingChanged(file)
 		{
-			console.log(file);
+			debugLog(file, "Playing Changed");
 			$('.now_playing_name').html(file.label);
 			if(file.thumbnail != '')
 			{
@@ -569,20 +321,18 @@
 				$('.play-toggle').removeClass("play-button");
 				$('.play-toggle').addClass("pause-button");
 			}
-			currentPlayType = file.xbmcMediaType;
-			//alert($('.playlist-item[xbmc-label="' + file.label + '"]').closest('li').html());
-			//$("#playlist_list").listview("refresh");
+			currentPlayType = file.xbmcMediaType;			
 		}
 
 		function progressChanged(progress)
 		{
-			//console.log(progress);
+			//debugLog(progress, "Progress Update");
 			$('.now_playing_time').html(progress.time + " / " + progress.total);
 		}
 
 		function statusChanged(status)
 		{			
-			console.log(status);
+			debugLog(status, "New Status");
 			if(status == 'stopped')
 			{
 				$('.now-playing').slideUp();
@@ -601,7 +351,7 @@
 			}
 		}
 
-		$("#remote").live('pageinit', function() {
+		$(document).on('pageinit', "#remote", function() {
 			
 			$( "#volume" ).val(volume);
 			$( "#volume" ).slider("refresh");
@@ -615,12 +365,10 @@
 
 			$('.xbmc-player').bind("click", function(event) {				
 				xbmc.control({type: $(this).attr('xbmc-control')})
-			});
-
-			
+			});			
 	     });
 
-		$("#now_playing").live('pageinit', function() {
+		$(document).on('pageinit', "#now_playing", function() {
 			
 			$( "#volume_np" ).val(volume);
 			$( "#volume_np" ).slider("refresh");
@@ -636,21 +384,6 @@
 				xbmc.control({type: $(this).attr('xbmc-control')})
 			});
 	     });
-
-		/*$("#playlist").live('pageinit', function() {
-			console.log("playlist");
-			$('.playlist-item').bind("tap", function(event) {	
-				var category = 	$(this).attr('xbmc-category');
-				var index = $(this).attr('xbmc-index');
-				//console.log(category + ' ' + index);
-				if(category == "music")	
-					xbmc.playAudio({item: index});
-				else if(category == "video")	
-					xbmc.playVideo({item: index, onError: showError})
-			});
-
-			
-	            });*/
 
 		function volumeChanged(vol)
 		{
@@ -678,6 +411,7 @@
 	    return hash;
 	}
 
+	//this is for parsing query strings out of the url because JQM doesn't do it automatically
 	jQuery.extend({
 		parseQuerystring: function(qs){
 		var nvpair = {};
@@ -708,136 +442,123 @@
 		return nvpair;
 		}
 	});
-		$( document ).bind( "pageshow", function( event, data ){
-			//$.mobile.showPageLoadingMsg();
+		$( document ).bind( "pageshow", function( event, data ){			
 			$.mobile.loading("hide");
 		});
+
+		//these global vars hold info about the page call so it can be accessed in the JSON RPC callback handler
+		//not a great solution but it works
 		var urlObj = null;
 		var options = null;
 
-		// Listen for any attempts to call changePage().
-		//$(document).bind( "pagebeforechange", function( e, data ) {
-			$(document).bind( "pagebeforechange", function( e, data ) {
-				loadThePage( e, data );
-			});
-			/*$(document).bind( "mobileinit", function( e, data ) {
-				//loadThePage( e, data );
-				alert("here");
-			});*/
+		//this is for handling dynamically generated pages, see http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html
+		$(document).bind( "pagebeforechange", function( e, data ) {
 
-		function loadThePage( e, data )
-		{
-
-			//$.mobile.showPageLoadingMsg();
 			$.mobile.loading( 'show' );
 			if ( typeof data.toPage === "string" ) {
 				console.log(data);
 
 				var u = $.mobile.path.parseUrl( data.toPage );
-					pageSelector = u.hash.replace( /\?.*$/, "" );
-					//console.log(pageSelector);
-					//pageSelector = data.toPage.substring(data.toPage.indexOf("#"), data.toPage.indexOf("?"));
-					//alert(data.toPage);
-					if(pageSelector == "#sourcelist")
-					{
-						showSourceList( u, data.options );
-						e.preventDefault();
-					}
-					else if(pageSelector == "#filelist")
-					{						
-						showFileList( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#playlist")
-					{						
-						showPlaylist( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#file_options")
-					{						
-						showFileOptions( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#folder_options")
-					{						
-						showFolderOptions( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#playlist_options")
-					{						
-						showPlaylistOptions( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#tvshows")
-					{						
-						showTVShows( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#tvseasons")
-					{			
-						showTVSeasons( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#tvseason")
-					{			
-						showTVSeason( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#music_albums" || pageSelector == "#music_artist_albums")
-					{			
-						showAlbums( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#music_album")
-					{			
-						showAlbum( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#music_artists")
-					{			
-						showArtists( u, data.options);						
-						e.preventDefault();						
-					}
-					else if(pageSelector == "#episode_info")
-					{
-						showEpisodeInfo( u, data.options);						
-						e.preventDefault();
-					}
-					else if(pageSelector == "#song_options")
-					{
-						showSongOptions( u, data.options);						
-						e.preventDefault();
-					}
-					else if(pageSelector == "#global_options")
-					{
-						renderGlobalOptions( u, data.options);						
-						e.preventDefault();
-					}
-					else if(pageSelector == "#channels")
-					{
-						showChannels( u, data.options);						
-						e.preventDefault();
-					}
-					else if(pageSelector == "#channel_groups")
-					{
-						showChannelGroups( u, data.options);						
-						e.preventDefault();
-					}
-
-
-					/*alert(pageSelector);
-					re = /^#sourcelist/;
-				if ( u.hash.search(re) !== -1 ) {
+				pageSelector = u.hash.replace( /\?.*$/, "" );
+				debugLog(pageSelector, '');
+				
+				if(pageSelector == "#sourcelist")
+				{
 					showSourceList( u, data.options );
 					e.preventDefault();
-				}*/
+				}
+				else if(pageSelector == "#filelist")
+				{						
+					showFileList( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#playlist")
+				{						
+					showPlaylist( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#file_options")
+				{						
+					showFileOptions( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#folder_options")
+				{						
+					showFolderOptions( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#playlist_options")
+				{						
+					showPlaylistOptions( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#tvshows")
+				{						
+					showTVShows( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#tvseasons")
+				{			
+					showTVSeasons( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#tvseason")
+				{			
+					showTVSeason( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#music_albums" || pageSelector == "#music_artist_albums")
+				{			
+					showAlbums( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#music_album")
+				{			
+					showAlbum( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#music_artists")
+				{			
+					showArtists( u, data.options);						
+					e.preventDefault();						
+				}
+				else if(pageSelector == "#episode_info")
+				{
+					showEpisodeInfo( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#song_options")
+				{
+					showSongOptions( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#global_options")
+				{
+					renderGlobalOptions( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#channels")
+				{
+					showChannels( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#channel_groups")
+				{
+					showChannelGroups( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#movies")
+				{
+					showMovies( u, data.options);						
+					e.preventDefault();
+				}
+				else if(pageSelector == "#movie")
+				{
+					showMovie( u, data.options);						
+					e.preventDefault();
+				}
 			}
-			else
-			{				
-				//$.mobile.changePage('#lobby?user=1234')
-			}
-		}
-		//});
+		});
 
 		function showSourceList( urlInfoObj, nav_options )
 		{
@@ -846,14 +567,12 @@
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
-			
-			//var categoryName = urlObj.hash.replace( /.*category=/, "" );
+						
 			var categoryName = qs['category'];
 			if ( categoryName ) 
 			{
 				xbmc.getSources({onSuccess: renderSourceList, media:categoryName});
-			}
-			
+			}			
 		}
 
 		function renderSourceList(result)
@@ -861,6 +580,7 @@
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var category = qs['category'];
+			debugLog(result, "Loading " + category + " sources");
 
 			var $page = $( pageSelector );
 			$content = $page.children( ":jqmData(role=content)" );
@@ -899,11 +619,10 @@
 				
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
-			var category = qs['category'];
-			//var file = unescape(urlObj.hash.replace( /.*file=/, "" ).replace(/\\/g, "/"));
+			var category = qs['category'];			
 			
 			var file = getFile(qs['file']);
-			//var file = getFile(urlObj.hash);
+			
 			var new_div_id = urlObj.hash.hashCode();
 			if(useCaching && $('#' + new_div_id).length > 0)
 			{				
@@ -921,9 +640,9 @@
 		function renderFileList(result)
 		{			
 			$.mobile.showPageLoadingMsg();
-			//var parent_file = unescape(urlObj.hash.replace( /.*file=/, "" ).replace(/\\/g, "/"));
+			debugLog(result, "Loading file list");
 			var qs = $.parseQuerystring(urlObj.hash);
-			//var parent_file = getFile(urlObj.hash);
+			
 			var parent_file = getFile(qs['file']);
 			var category = qs['category'];		
 			var new_div_id = urlObj.hash.hashCode();
@@ -937,13 +656,10 @@
 				new_div.append('<div data-role="content"></div>');
 				$('body').append(new_div);
 			}
-			//pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			//var $page = $( pageSelector );
+			
 			var $page = $( '#' + new_div_id );
 			$content = $page.children( ":jqmData(role=content)" );
-			
-				
-			//alert(JSON.stringify(result));
+						
 			var markup = "<ul data-role='listview' data-inset='true'>";
 			markup += '<li data-role="list-divider">XBMC</li>';
 			for(var i = 0; i < result.files.length; i++)
@@ -964,15 +680,13 @@
 			$page.page();
 			$content.find( ":jqmData(role=listview)" ).listview();
 			options.dataUrl = urlObj.href;
-			
-			//$.mobile.hidePageLoadingMsg();
+						
 			$.mobile.changePage( $page, options );
 		}
 
 		function getHeaderBar(heading, category)
 		{
-			var markup = '<div data-role="header">';
-			//markup += '<a href="index.html" data-icon="delete"></a>';
+			var markup = '<div data-role="header">';			
 			markup += '<h1>' + heading + '</h1>';
 			markup += '<a href="#playlist?category=' + category + '" data-icon="check" class="ui-btn-right" data-transition="flip">Playlist</a>';
 			markup += '</div>';
@@ -980,15 +694,15 @@
 		}
 
 		function getFile(url)
-		{
-			//return unescape(url.replace( /.*file=/, "" ).replace(/\\/g, "/"));
+		{			
 			return unescape(url).replace(/\\/g, "/");
 		}
 
 		function showError(err)
 		{
 			alert(err.error.message);
-			console.log(err);
+			debugLog(null, err);
+			$.mobile.loading( 'hide' );
 		}
 
 		function showPlaylist(urlInfoObj, nav_options )
@@ -996,7 +710,7 @@
 			urlObj = urlInfoObj;
 			options = nav_options;
 			var qs = $.parseQuerystring(urlObj.hash);
-			console.log(currentPlayType);
+			debugLog(null, "Loading playlist for " + currentPlayType);
 			if(qs['category'] == undefined)
 				qs['category'] = currentPlayType;
 			if(qs['category'] == "")
@@ -1011,7 +725,7 @@
 
 		function renderPlaylist(result)
 		{
-			//console.log(result);
+			debugLog(result, "Playlist Data");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);	
 			if(qs['category'] == undefined)
@@ -1049,17 +763,14 @@
 			else if(category == "music")
 			{
 				$page.find( ":jqmData(role=header) h1" ).html("Audio Playlist");
-				//$("#change_playlist_button").html("Video Playlist").attr("href", "#playlist?category=video");
 				$page.find( ":jqmData(role=header) a.ui-btn-right").attr("href", "#playlist?category=video");
 				$page.find( "#change_playlist_btn_text").html("Video Playlist");
 			}
 			else
-				$page.find( ":jqmData(role=header) h1" ).html("Playlist");
-			
+				$page.find( ":jqmData(role=header) h1" ).html("Playlist");			
 
 			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			//$page.find( ":jqmData(role=header)" ).find( ":jqmData(role=button)" ).button();
+			$content.find( ":jqmData(role=listview)" ).listview();			
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
@@ -1067,19 +778,15 @@
 		}
 
 		function showFileOptions( urlInfoObj, nav_options )
-		{
-			//alert('showFileList');
+		{			
 			urlObj = urlInfoObj;
 			options = nav_options;
 				
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
-			var category = qs['category'];
-			//var file = unescape(urlObj.hash.replace( /.*file=/, "" ).replace(/\\/g, "/"));
+			var category = qs['category'];			
 			
-			var file = getFile(qs['file']);
-			//var file = getFile(urlObj.hash);
-			
+			var file = getFile(qs['file']);						
 			
 			var $page = $( pageSelector );
 			$content = $page.children( ":jqmData(role=content)" );
@@ -1139,8 +846,7 @@
 			var $page = $( pageSelector );
 			$content = $page.find( ":jqmData(role=content)" );
 			markup = '<a data-role="button" class="play-playlist-item" xbmc-category="' + category + '" xbmc-index="' + index + '" href="javascript:void(0)">Play</a>';
-			markup += '<a data-role="button" class="' + category + '-unqueue" xbmc-index="' + index + '" href="javascript:void(0)">Remove</a>';
-			//markup += '<a data-role="button" class="queue-' + category + '" xbmc-index="' + index + '" href="javascript:void(0)">Queue</a>';
+			markup += '<a data-role="button" class="' + category + '-unqueue" xbmc-index="' + index + '" href="javascript:void(0)">Remove</a>';			
 			markup += '<a data-rel="back" data-role="button" href="#">Cancel</a>';
 
 			$content.html(markup);
@@ -1166,6 +872,7 @@
 
 		function renderTVShowList(result)
 		{
+			debugLog(result, "Loading TV Shows");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var category = qs['category'];
@@ -1181,7 +888,7 @@
 			else
 			{
 				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
+				markup += '<li data-role="list-divider">TV Shows</li>';
 				for(var i = 0; i < result.tvshows.length; i++)
 				{
 					//forward slashes mess up the query string so replace them 
@@ -1196,9 +903,7 @@
 			$content.find( ":jqmData(role=listview)" ).listview();
 			options.dataUrl = urlObj.href;
 
-			
-			$.mobile.changePage( $page, options );
-			console.log(result);
+			$.mobile.changePage( $page, options );			
 		}
 
 		function showTVSeasons( urlInfoObj, nav_options )
@@ -1207,7 +912,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var tvshowid = qs['tvshowid'];
 			
@@ -1216,7 +921,7 @@
 
 		function renderTVSeasonsList(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading TV Seasons");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var tvshowid = qs['tvshowid'];
@@ -1235,21 +940,31 @@
 				markup += '<li data-role="list-divider">XBMC</li>';
 				for(var i = 0; i < result.seasons.length; i++)
 				{
-					//forward slashes mess up the query string so replace them 
-					//and change back later(even though they are valid jqmobile doesn't like them)
-					//file = result.tvshows[i].file.replace(/\//g, "\\");
 					markup += '<li><a href="/#tvseason?season=' + result.seasons[i].season + '&tvshowid=' + tvshowid + '">' + result.seasons[i].label + '</a></li>';
 				}
 				markup += "</ul>";
 			}
-			$content.html(markup);
+			$content.html(markup);			
+			
 			$page.page();
 			$content.find( ":jqmData(role=listview)" ).listview();
 			options.dataUrl = urlObj.href;
 
-			
 			$.mobile.changePage( $page, options );
-			//console.log(result);
+
+			xbmc.getTvShowInfo({tvshowid : tvshowid, onSuccess: function(show_info) {
+				if(show_info.fanart != '')
+				{
+					$page.css("background", "url(" + xbmc.getThumbUrl(show_info.fanart) + ") no-repeat center center fixed");
+					$page.css("background-size", "cover");				
+					$content.find("ul").addClass("list-with-background");
+				}
+				else
+				{				
+					$page.css("background-image", "none");
+					$content.find("ul").removeClass("list-with-background");
+				}
+			}});			
 		}
 
 		function showTVSeason( urlInfoObj, nav_options )
@@ -1258,7 +973,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var tvshowid = qs['tvshowid'];
 			var season = qs['season'];
@@ -1268,7 +983,7 @@
 
 		function renderTVSeasonList(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading TV Season Episodes");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var tvshowid = qs['tvshowid'];
@@ -1284,14 +999,14 @@
 			}
 			else
 			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
+				markup += '<h2 id="season_label"></h2>';
+				markup += '<div id="season_poster_holder"><img id="season_poster" /></div>';
+				markup += "<ul data-role='listview' data-inset='true'>";
+				markup += '<li data-role="list-divider">Episodes</li>';
 				for(var i = 0; i < result.episodes.length; i++)
 				{
 					//forward slashes mess up the query string so replace them 
-					//and change back later(even though they are valid jqmobile doesn't like them)
-					//file = result.tvshows[i].file.replace(/\//g, "\\");
-					//markup += '<li><a href="javascript:void(0)" onclick="xbmc.playEpisode({episodeid : ' + result.episodes[i].episodeid + '})">' + result.episodes[i].label + '</a></li>';
+					//and change back later(even though they are valid jqmobile doesn't like them)					
 					markup += '<li><a href="/#episode_info?episodeid=' + result.episodes[i].episodeid + '">' + result.episodes[i].label + '</a></li>';
 				}
 				markup += "</ul>";
@@ -1303,7 +1018,35 @@
 
 			
 			$.mobile.changePage( $page, options );
-			//console.log(result);
+			xbmc.getSeasons({tvshowid : tvshowid, onSuccess: function(seasons) {
+				debugLog(seasons, "Getting Season Poster");
+				var s_index = season - 1;
+				if(seasons.seasons[s_index] != undefined && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art.poster != undefined)
+				{
+					$('#season_poster').attr("src", xbmc.getThumbUrl(seasons.seasons[s_index].art.poster));
+					$('#season_poster_holder').addClass("season-art");
+					$content.find("ul").addClass("has-season-art");
+				}
+				else	
+				{
+					$('#season_poster_holder').hide();
+					$content.find("ul").removeClass("has-season-art");
+				}
+
+				if(seasons.seasons[s_index] != undefined && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art['tvshow.fanart'] != undefined)				
+				{
+					$page.css("background", "url(" + xbmc.getThumbUrl(seasons.seasons[s_index].art['tvshow.fanart']) + ") no-repeat center center fixed");
+					$page.css("background-size", "cover");	
+					$content.find("ul").addClass("list-with-background");
+				}
+				else
+				{				
+					$page.css("background-image", "none");
+					$content.find("ul").removeClass("list-with-background");
+				}
+				if(seasons.seasons[s_index] != undefined)				
+					$('#season_label').html(seasons.seasons[s_index].label);
+			}});				
 		}
 
 		function showEpisodeInfo( urlInfoObj, nav_options )
@@ -1312,7 +1055,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var episodeid = qs['episodeid'];			
 			
@@ -1321,7 +1064,7 @@
 
 		function renderEpisodeInfo(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading Episode");
 			var $page = $( pageSelector );
 			$content = $page.children( ":jqmData(role=content)" );
 			var qs = $.parseQuerystring(urlObj.hash);
@@ -1329,13 +1072,22 @@
 			
 			var markup = '';
 			if(result.thumbnail != '')
+			{
+				markup += '<div class="episode_thumb"><div class="episode_thumb_inner">';
 				markup += '<img src="' + xbmc.getThumbUrl(result.thumbnail) + '" />';
+				markup += '</div></div>';
+			}
+			markup += '<div class="episode_info">';
+			markup += '<div class="episode_info_inner">';
 			markup += "<h1>" + result.label + "</h1>";
 			markup += "<h2> Season " + result.season + " Episode " + result.episode + "</h2>";
 			markup += "<p>" + result.plot + "</p>";
 
 			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'episodeid\', itemId : ' + episodeid + ', onError : showError})" data-role="button" data-inline="true">Play Episode</a>';
 			markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Episode</a>';
+
+			markup += '</div>';
+			markup += '</div>';
 
 			$content.html(markup);
 			$page.page();
@@ -1344,10 +1096,19 @@
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
+
+			if(result.fanart != '')
+			{
+				$page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
+				$page.css("background-size", "cover");				
+			}
+			else
+			{				
+				$page.css("background-image", "none");
+			}
 		}
 
 		//declare this global so we don't have to make a second call to get the album info
-		//var albums = null;
 		var albums_loaded = false;
 		function showAlbums( urlInfoObj, nav_options )
 		{
@@ -1355,21 +1116,19 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var artistid = qs['artistid'];			
 			var genreid = qs['genreid'];
-			//console.log(artistid);
-			
+						
 			if(artistid == undefined && genreid == undefined)
 			{
-				if(!albums_loaded)	
+				if(!albums_loaded || !useCaching)	
 					xbmc.getAlbums({onSuccess: renderAlbumList, onError : showError});
 				else
 				{
-					//renderAlbumList(albums);
 					$.mobile.loading( 'show' );
-					console.log("loading cached version of albums");
+					debugLog(null, "loading cached version of albums");
 					var $page = $( pageSelector );
 					$page.page();
 					$.mobile.changePage( $page, options );
@@ -1381,19 +1140,17 @@
 		
 		function renderAlbumList(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading Albums");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var artistid = qs['artistid'];			
 			var genreid = qs['genreid'];
 
-			/*if(artistid == undefined && genreid == undefined)
-				albums = result;*/
 			if(artistid == undefined && genreid == undefined)
 				albums_loaded = true;
 
 			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
+			$content = $page.find( ":jqmData(role=content)" );
 			
 			var markup = '';			
 			if(result == null || result.limits.total == 0 || result.albums.length == 0)
@@ -1401,9 +1158,11 @@
 				markup = "There are no albums in your library.";				
 			}
 			else
-			{				
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
+			{	
+				if(artistid != undefined)
+					markup += '<div id="artist_info"><div id="artist_info_inner"></div></div>';
+				markup += "<ul data-role='listview' data-inset='true'>";
+				markup += '<li data-role="list-divider">Albums</li>';
 				for(var i = 0; i < result.albums.length; i++)
 				{
 					var label = result.albums[i].label;
@@ -1420,7 +1179,33 @@
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
-			//console.log(result);
+			if(artistid != undefined)
+				loadArtistInfo(artistid, $content, $page, false);
+		}
+
+		function loadArtistInfo(artistid, content, page, background_only)
+		{			
+			xbmc.getArtistDetails({onSuccess: function(result) {
+				debugLog(result, "Loaded artist info");
+				if(result.fanart != '')
+				{
+					page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
+					page.css("background-size", "cover");	
+					content.find("ul").addClass("list-with-background");
+				}
+				else
+				{				
+					page.css("background-image", "none");
+					content.find("ul").removeClass("list-with-background");
+				}
+				if(!background_only)
+				{
+					var info_div = page.find('#artist_info_inner');
+					var markup = '<h1 onclick="$(\'#artist_bio\').slideToggle()">' + result.label + "</h1>";
+					markup += '<p id="artist_bio">' + result.description + "</p>";
+					info_div.html(markup);	
+				}			
+			}, artistid : artistid});
 		}
 
 		function showAlbum( urlInfoObj, nav_options )
@@ -1429,7 +1214,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var albumid = qs['albumid'];
 			
@@ -1438,7 +1223,7 @@
 
 		function renderAlbum(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading Album Songs");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
 			var albumid = qs['albumid'];
@@ -1457,8 +1242,7 @@
 				markup += "<ul data-role='listview' data-inset='true' class='album_songs'>";
 				markup += '<li data-role="list-divider">Tracks</li>';
 				for(var i = 0; i < result.songs.length; i++)
-				{
-					//markup += '<li><a href="javascript:void(0)" onclick="xbmc.playSong({songid : ' + result.songs[i].songid + '})">' + ((result.songs[i].track < 6000) ? result.songs[i].track + ". " : '') + result.songs[i].label + '</a></li>';
+				{					
 					markup += '<li><a href="#song_options?song_id=' + result.songs[i].songid + '">' + ((result.songs[i].track < 6000) ? result.songs[i].track + ". " : '') + result.songs[i].label + '</a></li>';
 				}
 				markup += "</ul>";
@@ -1466,53 +1250,53 @@
 			$content.html(markup);
 			$page.page();
 			$content.find( ":jqmData(role=listview)" ).listview();
-			//$content.find( ":jqmData(role=header)" ).html(getLibraryHeaderBar("Artists")).page();
+			
 			options.dataUrl = urlObj.href;
-
 			
 			$.mobile.changePage( $page, options );
-			//console.log(result);
-			loadAlbumInfo(albumid, $content, $page);
+			loadAlbumInfo(albumid, $content, $page);			
 		}
 
 		function loadAlbumInfo(albumid, content, page)
 		{
 			xbmc.getAlbumDetails({onSuccess: function(result){
-				console.log(result);
-				var markup = '';
+				debugLog(result, "Loading Album Info");
+				var markup = '<div class="album_info_inner">';
 				if(result.thumbnail != '')
 					markup += '<img src="' + xbmc.getThumbUrl(result.thumbnail) + '" />';
 				markup += '<h2>' + result.artist + '</h2>';
 				markup += '<h3>' + result.label + '</h3>';
 				markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Play Album</a>';
 				markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Queue Album</a>';
+				markup += '</div>'; //end album_info_inner
 				$('#album_info').html(markup);
 				content.find( ":jqmData(role=button)" ).button();
 				page.find( ":jqmData(role=header) h1" ).html(result.label);
+				if(result.artistid.length > 0)
+					loadArtistInfo(result.artistid[0], content, page, true);
 			}, onError: showError, albumid : albumid});
-		}
+		}		
 
-		//declare this global so we don't have to make a second call to get the album info
+
+		//cache the artists
 		var artists = null;
 		function showArtists( urlInfoObj, nav_options )
 		{
 			urlObj = urlInfoObj;
 			options = nav_options;				
 			
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			pageSelector = urlObj.hash.replace( /\?.*$/, "" );			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			var genreid = qs['genreid'];			
 			
 			if(genreid == undefined)
 			{
-				if(artists == null)	
+				if(artists == null || useCaching == false)	
 					xbmc.getArtists({onSuccess: renderArtistList, genreid : genreid});	
 				else
-				{
-					//renderAlbumList(albums);
+				{					
 					$.mobile.loading( 'show' );
-					console.log("loading cached version of artists");
+					debugLog(artists, "loading cached version of artists");
 					var $page = $( pageSelector );
 					$page.page();
 					$.mobile.changePage( $page, options );
@@ -1526,11 +1310,9 @@
 		function renderArtistList(result)
 		{
 			artists = result;
-			console.log(result);
+			debugLog(result, "Loading Artists");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			//var tvshowid = qs['tvshowid'];
-			//var season = qs['season'];
+			var qs = $.parseQuerystring(urlObj.hash);
 
 			var $page = $( pageSelector );
 			$content = $page.find( ":jqmData(role=content)" );
@@ -1557,7 +1339,6 @@
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
-			//console.log(result);
 		}
 
 		function showSongOptions( urlInfoObj, nav_options )
@@ -1566,10 +1347,10 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var songid = qs['song_id'];
-			console.log("options for song " + songid);
+			debugLog(null, "options for song " + songid);
 
 			var $page = $( pageSelector );
 			$content = $page.find( ":jqmData(role=content)" );
@@ -1579,8 +1360,6 @@
 			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Queue Song</a>';
 			markup += '<a data-rel="back" data-role="button" href="#">Cancel</a>';
 			
-			//console.log($content.html());
-			//console.log(markup);
 			$content.html(markup);
 
 			$page.page();			
@@ -1590,21 +1369,23 @@
 			$.mobile.changePage( $page, options );
 		}
 
+		
+		//PVR
+
 		function showChannelGroups( urlInfoObj, nav_options )
 		{
 			urlObj = urlInfoObj;
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
 			var qs = $.parseQuerystring(urlObj.hash);			
 			
-			xbmc.pvrGetChannelGroups({onSuccess: renderChannelGroups});				
+			xbmc.pvrGetChannelGroups({onSuccess: renderChannelGroups, onError : showError});				
 		}
 
 		function renderChannelGroups(result)
 		{
-			console.log(result);
+			debugLog(result, "Channel Groups");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 
@@ -1641,7 +1422,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			var channelgroupid = qs['channelgroupid'];
 			
@@ -1651,7 +1432,7 @@
 
 		function renderChannels(result)
 		{
-			console.log(result);
+			debugLog(result, "Loading Channels");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 
@@ -1669,8 +1450,7 @@
 				markup += '<li data-role="list-divider">Stations</li>';
 				for(var i = 0; i < result.channels.length; i++)
 				{
-					markup += '<li><a href="javascript:void()" onclick="xbmc.playerOpen({item : \'channelid\', itemId : ' + result.channels[i].channelid + '})">' + result.channels[i].label + '</a></li>';
-					//markup += '<li><a href="javascript:void()" class="channel-button">' + result.channels[i].label + '</a></li>';
+					markup += '<li><a href="javascript:void()" onclick="xbmc.playerOpen({item : \'channelid\', itemId : ' + result.channels[i].channelid + '})">' + result.channels[i].label + '</a></li>';					
 				}
 				markup += "</ul>";
 			}
@@ -1681,15 +1461,7 @@
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
-		}		
-
-		/*function getLibraryHeaderBar(heading)
-		{
-			var markup = '<h1>' + heading + '</h1>';
-			markup += '<a href="#global_options" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a>';
-			
-			return markup;
-		}*/
+		}
 
 		function renderGlobalOptions( urlInfoObj, nav_options )
 		{
@@ -1697,7 +1469,7 @@
 			options = nav_options;				
 			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			console.log(pageSelector);
+			
 			var qs = $.parseQuerystring(urlObj.hash);
 
 			if(qs['category'] == undefined)
@@ -1713,6 +1485,105 @@
 			$.mobile.changePage( $page, options );
 		}
 
+		/*movies*/
+		function showMovies(urlInfoObj, nav_options)
+		{
+			urlObj = urlInfoObj;
+			options = nav_options;				
+			
+			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
+			
+			var qs = $.parseQuerystring(urlObj.hash);			
+			
+			xbmc.getMovies({onSuccess: renderMovies, onError : showError});
+		}
+
+		function renderMovies(result)
+		{
+			debugLog(result, "Loading Movies");
+			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
+			var qs = $.parseQuerystring(urlObj.hash);			
+
+			var $page = $( pageSelector );
+			$content = $page.children( ":jqmData(role=content)" );
+			
+			var markup = '';			
+			if(result.limits.total == 0 || result.movies.length == 0)
+			{
+				markup = "There are no movies in your library.";
+			}
+			else
+			{
+				markup = "<ul data-role='listview' data-inset='true'>";
+				markup += '<li data-role="list-divider">Movies</li>';
+				for(var i = 0; i < result.movies.length; i++)
+				{			
+					markup += '<li><a href="/#movie?movieid=' + result.movies[i].movieid + '">' + result.movies[i].label + '</a></li>';
+				}
+				markup += "</ul>";
+			}
+			$content.html(markup);
+			$page.page();
+			$content.find( ":jqmData(role=listview)" ).listview();
+			options.dataUrl = urlObj.href;
+
+			
+			$.mobile.changePage( $page, options );
+		}
+
+		function showMovie(urlInfoObj, nav_options)
+		{
+			urlObj = urlInfoObj;
+			options = nav_options;
+			
+			var qs = $.parseQuerystring(urlObj.hash);			
+			
+			xbmc.getMovieInfo({onSuccess: renderMovie, onError : showError, movieid : qs['movieid']});
+		}
+
+		function renderMovie(result)
+		{
+			
+			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
+			var qs = $.parseQuerystring(urlObj.hash);
+			debugLog(result, "Loading Movie " + qs['movieid']);	
+			movieid = qs["movieid"];
+
+			var $page = $( pageSelector );
+			$content = $page.children( ":jqmData(role=content)" );
+			
+			var markup = '<div class="movie-info-div">';
+			markup += '<div class="movie-info-div-inner">';
+			if(result.thumbnail != '')
+				markup += '<div class="movie-thumb-holder"><img class="movie_thumb" src="' + xbmc.getThumbUrl(result.thumbnail) + '" /></div>';
+			markup += '<div class="movie-info">';
+			markup += "<h1>" + result.label + "</h1>";
+			markup += "<h2> Year: " + result.year + ", Director: " + result.director + "</h2>";
+			markup += "<p>" + result.plot + "</p>";
+
+			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'movieid\', itemId : ' + movieid + ', onError : showError})" data-role="button" data-inline="true">Play Movie</a>';
+			markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'movieid\', itemId : ' + movieid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Movie</a>';
+			markup += "</div>";
+			markup += "</div>";
+			markup += "</div>";
+
+			$content.html(markup);
+			$page.page();
+			$content.find( ":jqmData(role=listview)" ).listview();
+			$content.find( ":jqmData(role=button)" ).button();
+			options.dataUrl = urlObj.href;
+			if(result.fanart != '')
+			{
+				$page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
+				$page.css("background-size", "cover");				
+			}
+			else
+			{				
+				$page.css("background-image", "none");
+			}
+			
+			$.mobile.changePage( $page, options );
+		}
 	</script>
 	
 </head> 
@@ -1725,8 +1596,9 @@
 				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
 					<li data-role="list-divider">XBMC</li>
 					<li><a href="#tvshows">TV Shows</a></li>
-					<li><a href="#music">Music</a></li>
-					<li><a href="#channel_groups">Live TV</a></li>
+					<li><a href="#music">Music</a></li>					
+					<li id="PVR_menu_item"><a href="#channel_groups">Live TV</a></li>
+					<li><a href="#movies">Movies</a></li>
 					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-b">Files</li>
 					<li><a href="#sourcelist?category=video">Videos</a></li>
 					<li><a href="#sourcelist?category=music">Music</a></li>
@@ -1757,11 +1629,21 @@
 </div>
 <div id="tvseason" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
-  <div data-role="content"></div>
+  <div data-role="content" id="season_content"></div>
 </div>
 <div id="episode_info" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="content" id="episode_content"></div>
+</div>
+
+<!----MOVIES---->
+<div id="movies" data-role="page" data-add-back-btn="true" class="swipable">
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
   <div data-role="content"></div>
+</div>
+<div id="movie" data-role="page" data-add-back-btn="true" class="swipable">
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="content" id="movie_content"></div>
 </div>
 
 <div id="music" data-role="page" data-add-back-btn="true" class="swipable">
@@ -1783,7 +1665,9 @@
 
 <div id="music_artist_albums" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
-  <div data-role="content"></div>
+  <div class="artist-info-div">
+  	<div data-role="content"></div>
+  </div>
 </div>
 
 <div id="music_album" data-role="page" data-add-back-btn="true" class="swipable">

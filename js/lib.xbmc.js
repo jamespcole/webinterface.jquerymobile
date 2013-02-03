@@ -647,7 +647,7 @@ var xbmc = {};
           settings.onSuccess(reponse.result);
         },
         function(response) {
-          settings.onError();
+          settings.onError(response);
         }
       );
     },
@@ -1344,7 +1344,7 @@ var xbmc = {};
       $.extend(settings, options);
 
       xbmc.sendCommand(
-        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": { ' + (settings.item == ''? (settings.filter != ''? settings.filter + ', ' : '') : '"filter": { "' + settings.item + '": ' + (settings.itemId !== -1? settings.itemId : '"' + settings.itemStr + '"') + '}, ') + '"limits": { "start" : ' + settings.start + ', "end": ' + settings.end + ' }, "properties": ["playcount", "artist", "genre", "rating", "thumbnail", "year", "mood", "style"], "sort": { "order": "' + settings.order + '", "method": "' + settings.sortby + '", "ignorearticle": true } }, "id": "libAlbums"}',
+        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": { ' + (settings.item == ''? (settings.filter != ''? settings.filter + ', ' : '') : '"filter": { "' + settings.item + '": ' + (settings.itemId !== -1? settings.itemId : '"' + settings.itemStr + '"') + '}, ') + '"limits": { "start" : ' + settings.start + ', "end": ' + settings.end + ' }, "properties": ["playcount", "artist", "artistid", "genre", "rating", "thumbnail", "year", "mood", "style"], "sort": { "order": "' + settings.order + '", "method": "' + settings.sortby + '", "ignorearticle": true } }, "id": "libAlbums"}',
 
         function(response) {
           settings.onSuccess(response.result);
@@ -1363,7 +1363,7 @@ var xbmc = {};
       $.extend(settings, options);
 
       xbmc.sendCommand(
-        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": { "albumid" : ' + settings.albumid + ', "properties" : ["playcount", "rating", "artist", "thumbnail", "description", "title", "genre", "theme", "mood", "style", "type", "albumlabel", "year", "musicbrainzalbumid", "musicbrainzalbumartistid", "fanart" ] }, "id": "libAlbumDets"}',
+        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": { "albumid" : ' + settings.albumid + ', "properties" : ["playcount", "rating", "artist", "artistid", "thumbnail", "description", "title", "genre", "theme", "mood", "style", "type", "albumlabel", "year", "musicbrainzalbumid", "musicbrainzalbumartistid", "fanart" ] }, "id": "libAlbumDets"}',
 
         function(response) {
           settings.onSuccess(response.result.albumdetails);
@@ -2053,8 +2053,8 @@ var xbmc = {};
       };
       $.extend(settings, options);
 
-      settings.sortby = awxUI.settings.filmSort;
-      settings.order = awxUI.settings.mdesc;
+      //settings.sortby = awxUI.settings.filmSort;
+      //settings.order = awxUI.settings.mdesc;
 
       xbmc.sendCommand(
         '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { ' + (settings.item == ''? (settings.filter != ''? settings.filter + ', ' : '') : '"filter": { "' + settings.item + '": ' + (settings.itemId !== -1? settings.itemId : '"' + settings.itemStr + '"') + '}, ') + '"limits": { "start" : ' + settings.start + ', "end": ' + settings.end + ' }, "properties" : ["art", "rating", "thumbnail", "playcount", "file"], "sort": { "order": "' + settings.order +'", "method": "' + settings.sortby + '", "ignorearticle": true } }, "id": "libMovies"}',

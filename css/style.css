@@ -1,5 +1,255 @@
+.list-with-background {
+	opacity:0.9;
+}
+
+#artist_info p {
+	display:inline-block;
+}
+
+#music_artist_albums ul {
+	width: 60%;
+	float: left;
+}
+
+#artist_info {
+	display:inline-block;
+	width: 30%;
+	float: right;
+	border-radius: .6em;
+	background-color: rgba(255,255,255, 0.8);
+}
+
+#artist_info_inner {
+	padding: 1px 14px;
+}
+
+#artist_info_inner h1 {
+	cursor:pointer;
+	cursor:hand;
+}
+
+
+.movie-info-div-inner {	
+	padding: 14px;
+}
+#movie_content
+{
+	padding:0px;
+	text-shadow: 0 1px 0 #878787;
+}
+.movie_thumb {
+  	float:left;
+  	margin-right:20px;
+  	height:400px;
+  }
+
+
+ .album_info {
+	  	display:inline-block;
+	    width: 30%;
+	    float: right;
+	    margin-right: 10px;
+	    background-color: rgba(255,255,255, 0.8);
+		border-radius: .6em;
+		margin-top: 1em;
+	  }
+	  .album_info_inner {
+	  	padding:5px;
+	  }
+	  .album_info img {
+	  	width:100%;
+	  	margin-top:15px;
+	  }
+	  .album_songs {
+	    width: 65%;
+	    float: left;
+	    display:inline-block;
+	  }
+
+/* EPISODES */
+.episode_info {
+	float:right;
+	width:60%;
+	background-color: rgba(255,255,255,0.8);
+	border-radius: .6em;
+}
+
+.episode_info_inner {
+	padding:10px;
+}
+
+.episode_thumb {
+	width:30%;
+	float:left;
+	background-color: rgba(255,255,255,0.8);
+	border-radius: .6em;
+	margin-bottom:14px;
+}
+
+.episode_thumb_inner {
+	padding:10px;	
+}
+.episode_thumb_inner img {
+	width: 100%;
+}
+
+#episode_content {
+
+}
+
+#season_content .has-season-art {
+	width:60%;
+	float:right;
+	display:inline-block;
+}
+
+
+#season_content .season-art {
+	width:30%;
+	float:left;
+	display:inline-block;
+}
+
+
+
 /*responsive css for different screen sizes*/
-@media all and (min-width: 480px) {
+	/*@media all and (min-width: 1100px) {		
+
+	   #artist_info p {
+	  	display:inline-block;
+	  }
+
+	   #music_artist_albums ul {
+	  	width: 60%;
+	  	float: left;
+	  }
+
+	  #artist_info {
+	  	display:inline-block;
+	    width: 30%;
+	    float: right;
+	  }	  	
+
+	}*/
+
+	/*@media all and (max-width: 767px) {
+	  .album_info {
+	    width: 100%;
+	  }
+	  .album_info img {
+	  	width:100%;
+	  }
+	  .album_songs {
+	    width: 100%;
+	  }
+
+	  #episode_info img {
+	  	width:100%;
+	  	margin-right:10px;
+	  }
+	  .movie-info-div { }
+ 		.movie-info-div-inner {	
+			padding: 14px;
+		}
+		#movie_content
+		{
+			padding:0px;
+			text-shadow: 0 1px 0 #878787;
+		}
+		.movie_thumb {
+			width:100%;
+		}
+
+		#music_artist_albums ul {
+	  	float:none;
+	  }
+
+	  #artist_info p {
+	  	display:none;
+	  }
+	}*/
+
+	@media all and (max-width: 1279px) {
+		#music_artist_albums ul {
+	  	float:none;
+	  }
+
+	  #music_artist_albums ul {	  	
+	  	float:none;
+	  	width:100%;
+	  }
+
+	  #artist_info {	  	
+	    float:none;
+	    width:100%;
+	  }	  	
+
+	  #artist_info p {
+	  	display:none;
+	  }	   
+	}
+
+	@media all and (max-width: 767px) {
+		
+
+	  .album_info {
+	    width: 100%;
+	    float:none;
+	  }
+	  .album_info img {
+	  	width:100%;
+	  }
+	  .album_songs {
+	    width: 100%;
+	  }
+
+	  #episode_info img {
+	  	width:100%;
+	  	margin-right:10px;
+	  }
+	  .movie-info-div { }
+ 		.movie-info-div-inner {	
+			padding: 14px;
+		}
+		#movie_content
+		{
+			padding:0px;
+			text-shadow: 0 1px 0 #878787;
+		}
+		.movie_thumb {
+			/*width:100%;*/
+		}
+
+		.episode_info {
+			float:none;
+			width:100%;
+		}
+
+		.episode_thumb {
+			float:none;
+			width:100%;
+		}
+
+		#season_content .has-season-art {
+			width:100%;
+			display:inline-block;
+		}
+
+
+		#season_content .season-art {
+			width:100%;
+			text-align:center;
+			display:inline-block;
+		}
+
+		#season_poster_holder img {
+			height:250px;
+		}
+	}
+
+
+
+/*@media all and (min-width: 480px) {
 	  .album_info {
 	  	display:inline-block;
 	    width: 30%;
@@ -15,11 +265,27 @@
 	    float: left;
 	    display:inline-block;
 	  }
-	}
+	  .movie_thumb {
+	  	float:left;
+	  	margin-right:20px;
+	  }
+
+	  #artist_info {
+	  	display:inline-block;	   
+	    margin-right: 5px;
+	    margin-left: 1em;
+	    margin-top:10px;
+	  }	   
+
+	  #music_artist_albums ul {	 	    
+	    margin-top:10px;
+	  }
+
+	}*/
 
 	@media all and (max-width: 479px) {
 	  .album_info {
-	    width: 100%;
+	    width: 100%;	    
 	  }
 	  .album_info img {
 	  	width:100%;
@@ -32,7 +298,41 @@
 	  	width:100%;
 	  	margin-right:10px;
 	  }
+	  .movie-info-div { }
+ 		.movie-info-div-inner {	
+			padding: 14px;
+		}
+		#movie_content
+		{
+			padding:0px;
+		}
+		.movie-thumb-holder {
+			width:100%;
+			display:inline-block;
+			text-align:center;
+		}
+
+		.movie_thumb {
+			float:none;
+			margin:0px;
+		}	
+
+		#music_artist_albums ul {
+		  	width: 100%;
+		    float: left;
+		    margin-top:10px;
+		  }			
 	}
+
+
+.movie-info-div {
+	background-color:rgba(255, 255, 255, 0.6);
+}
+
+#music_artist_albums {
+	height:100%;
+}
+
 
 /*remote control*/
 
