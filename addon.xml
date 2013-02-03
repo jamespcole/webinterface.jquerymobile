@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="webinterface.jquerymobile"
+  version="0.0.1"
+  name="jQueryMobile"
+  provider-name="James Cole">
+  <requires>
+    <import addon="xbmc.gui" version="2.11"/>
+  </requires>
+  <extension
+    point="xbmc.gui.webinterface"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">jQueryMobile - jQueryMobile based Webinterface for XBMC</summary>
+    <description lang="en">
+	Designed for use with Android and iOS devices
+	</description>
+    <platform>all</platform>
+  </extension>
+</addon>
