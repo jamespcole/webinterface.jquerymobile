@@ -1,0 +1,260 @@
+/*responsive css for different screen sizes*/
+@media all and (min-width: 480px) {
+	  .album_info {
+	  	display:inline-block;
+	    width: 30%;
+	    float: right;
+	    margin-right: 20px;
+	  }
+	  .album_info img {
+	  	width:100%;
+	  	margin-top:15px;
+	  }
+	  .album_songs {
+	    width: 65%;
+	    float: left;
+	    display:inline-block;
+	  }
+	}
+
+	@media all and (max-width: 479px) {
+	  .album_info {
+	    width: 100%;
+	  }
+	  .album_info img {
+	  	width:100%;
+	  }
+	  .album_songs {
+	    width: 100%;
+	  }
+
+	  #episode_info img {
+	  	width:100%;
+	  	margin-right:10px;
+	  }
+	}
+
+/*remote control*/
+
+.remote-buttons-container {
+	width:100% !important;
+	max-width:350px !important;
+}
+
+.remote-button {
+	width:33% !important;
+}
+
+.round-button {
+	width:70px;
+	height: 70px;
+	border-radius:100%;
+	background-color:grey;
+	text-align:center;
+	background-color: #DDD;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#CCC));
+	background-image: -webkit-linear-gradient(top, #EEE, #CCC);
+	background-image: -moz-linear-gradient(top, #EEE, #CCC);
+	background-image: -ms-linear-gradient(top, #EEE, #CCC);
+	background-image: -o-linear-gradient(top, #EEE, #CCC);
+	background-image: linear-gradient(top, #EEE, #CCC);
+	border: 1px solid #777;
+	display:inline-block;
+	cursor:pointer;
+	cursor:hand;
+}
+.round-button:active {
+	position:relative;
+	top:3px;
+}
+
+.play-button {
+	width: 10px;
+	height: 0; 
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;			
+	border-left: 30px solid white;
+	/*margin-top:15px;*/
+	margin-left:25px;
+	margin-right:0px;
+	position:relative;
+	top:18px;
+	margin-top:-5px;
+}
+
+.pause-button {
+	width: 10px; 
+	height: 40px; 
+	border-left: 10px solid white;		
+	border-right: 10px solid white;
+	margin-top:15px;
+	margin-left:20px;
+	margin-right:0px;
+}
+
+.ff-button {
+	padding-left:20px;
+	/*padding-top:5px;*/
+	position:relative;
+	top:20px;
+}
+
+.ff-button div {
+	width: 10px; 
+	height: 0; 
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;			
+	border-left: 20px solid white;
+	/*margin-top:15px;*/
+	margin-right:0px;
+	display:inline-block;
+	margin-left:-10px;
+}
+
+.rw-button {
+	padding-left:0px;
+	/*padding-top:5px;*/
+	position:relative;
+	top:20px;
+}
+
+.rw-button div {
+	width: 10px; 
+	height: 0; 
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;			
+	border-right: 20px solid white;
+	/*margin-top:15px;*/
+	margin-right:0px;
+	display:inline-block;
+	margin-left:-10px;
+}
+
+.home-button {
+	
+	/*padding-top:5px;*/
+	position:relative;
+	top:-5px;
+}
+
+.home-button div:first-child {
+	width: 0px;
+	height: 0; 
+	/*border-top: 20px solid transparent;*/
+	border-bottom: 15px solid white;			
+	border-left: 30px solid transparent;			
+	border-right: 30px solid transparent;
+	left:-40px;
+	position:relative;
+	top:-30px;
+	margin:45px;
+}
+
+.home-button div:last-child {
+	width: 10px;
+	height: 0; 
+	border-top: 15px solid white;
+	border-bottom: 15px solid white;			
+	border-left: 15px solid white;			
+	border-right: 15px solid white;
+	left:15px;
+	
+	position:relative;
+	top:-75px;
+}
+
+.up-button {
+	position:relative;
+	top:-5px;
+}
+.up-button div:first-child {
+	width: 0px;
+	height: 0; 
+	/*border-top: 25px solid transparent;*/
+	border-bottom: 35px solid white;			
+	border-left: 25px solid transparent;			
+	border-right: 25px solid transparent;
+	left:10px;
+	position:relative;
+	top:-44px;
+	margin-top: 62px;
+}
+
+.back-button {
+	position:relative;
+	top:-5px;
+}
+.back-button div:first-child {
+	width: 0px;
+	height: 0; 
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;			
+	border-right: 15px solid white;
+	position:relative;
+	top:-12px;
+	margin-top: 29px;
+	left:10px;
+}
+
+.back-button div:last-child {
+	width: 20px;
+	height: 20px; 
+	border-top: 5px solid white;		
+	border-right: 5px solid white;
+	position:relative;
+	top:-30px;
+	margin-top: 0px;
+	left:20px;
+}
+
+.left-button {
+	position:relative;
+	top:-5px;
+}
+.left-button div:first-child {
+	width: 0px;
+	height: 0; 
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;			
+	border-right: 35px solid white;
+	position:relative;
+	top:-12px;
+	margin-top: 29px;
+	left:10px;
+}
+
+.right-button {
+	position:relative;
+	top:-5px;
+}
+.right-button div:first-child {
+	width: 0px;
+	height: 0; 
+	border-top: 25px solid transparent;
+	border-bottom: 25px solid transparent;			
+	border-left: 35px solid white;
+	position:relative;
+	top:-12px;
+	margin-top: 29px;
+	left:10px;
+}
+
+.select-button {
+	position:relative;
+	top:-5px;
+}
+.select-button div:first-child {
+	width: 10px;
+	height: 10px; 
+	border:solid white 15px;
+	position:relative;
+	top:-18px;
+	margin-top: 38px;
+	left:15px;
+}
+
+.round-button-holder {
+	width:100%;
+	text-align:center;
+	margin-bottom:5px;
+}
