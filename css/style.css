@@ -54,11 +54,10 @@
 		margin-top: 1em;
 	  }
 	  .album_info_inner {
-	  	padding:5px;
+	  	padding:14px;
 	  }
 	  .album_info img {
-	  	width:100%;
-	  	margin-top:15px;
+	  	width:100%;	  	
 	  }
 	  .album_songs {
 	    width: 65%;
@@ -110,8 +109,45 @@
 	display:inline-block;
 }
 
+#season_info_holder img {
+	width:100%;
+}
 
+#season_info_holder h2 {
+	background-color: rgba(255,255,255, 0.9);
+	display: inline-block;
+	border-radius: .6em;
+	padding: 10px;
+	display:none;
+}
 
+#show_season_list {
+	float:left;
+	width:60%;
+}
+
+#tv_show_info {
+	border-radius: .6em;
+	background-color: rgba(255,255,255, 0.9);
+	float:right;
+	width:30%;
+}
+
+#tv_show_info.has-artwork h2 {
+	display:none;
+}
+
+#tv_show_inner {
+	padding:14px;
+}
+
+#tv_show_inner h2 {
+	margin: 0px;
+}
+
+#tv_show_inner img {
+	max-width:100%;
+}
 /*responsive css for different screen sizes*/
 	/*@media all and (min-width: 1100px) {		
 
@@ -242,9 +278,28 @@
 			display:inline-block;
 		}
 
-		#season_poster_holder img {
-			height:250px;
+		#season_info_holder img {
+			display:none;
 		}
+
+		#tv_show_inner img {
+			width:100%;
+		}
+
+		#show_season_list {
+			float:none;
+			width:100%;
+		}
+
+		#tv_show_info {			
+			float:none;
+			width:100%;
+		}
+
+		#tv_show_info p {
+			display:none;
+		}
+
 	}
 
 

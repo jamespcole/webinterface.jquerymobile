@@ -936,8 +936,9 @@
 			}
 			else
 			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
+				markup += '<div id="tv_show_info"><div id="tv_show_inner"></div></div>';
+				markup += "<ul data-role='listview' data-inset='true' id='show_season_list'>";
+				markup += '<li data-role="list-divider">Seasons</li>';
 				for(var i = 0; i < result.seasons.length; i++)
 				{
 					markup += '<li><a href="/#tvseason?season=' + result.seasons[i].season + '&tvshowid=' + tvshowid + '">' + result.seasons[i].label + '</a></li>';
@@ -952,7 +953,8 @@
 
 			$.mobile.changePage( $page, options );
 
-			xbmc.getTvShowInfo({tvshowid : tvshowid, onSuccess: function(show_info) {
+			xbmc.getTvShowInfo({tvshowid : tvshowid, onError : showError, onSuccess: function(show_info) {
+				debugLog(show_info, "Loaded Show Info");
 				if(show_info.fanart != '')
 				{
 					$page.css("background", "url(" + xbmc.getThumbUrl(show_info.fanart) + ") no-repeat center center fixed");
@@ -964,6 +966,20 @@
 					$page.css("background-image", "none");
 					$content.find("ul").removeClass("list-with-background");
 				}
+				var markup = '';
+				if(show_info.art != undefined && show_info.art.banner != undefined)
+				{
+					markup += '<img src="' + xbmc.getThumbUrl(show_info.art.banner) + '" />';
+					$('#tv_show_info').addClass('has-artwork');
+				}
+				else if(show_info.thumbnail != '')
+				{
+					markup += '<img src="' + xbmc.getThumbUrl(show_info.thumbnail) + '" />';
+					$('#tv_show_info').addClass('has-artwork');		
+				}
+				markup += '<h2>' + show_info.label + '</h2>';
+				markup += '<p>' + show_info.plot + '</p>';
+				$('#tv_show_inner').html(markup);
 			}});			
 		}
 
@@ -999,8 +1015,8 @@
 			}
 			else
 			{
-				markup += '<h2 id="season_label"></h2>';
-				markup += '<div id="season_poster_holder"><img id="season_poster" /></div>';
+				//markup += '<h2 id="season_label"></h2>';
+				markup += '<div id="season_info_holder"><h2 id="season_label"></h2><img id="season_poster" /></div>';
 				markup += "<ul data-role='listview' data-inset='true'>";
 				markup += '<li data-role="list-divider">Episodes</li>';
 				for(var i = 0; i < result.episodes.length; i++)
@@ -1020,20 +1036,24 @@
 			$.mobile.changePage( $page, options );
 			xbmc.getSeasons({tvshowid : tvshowid, onSuccess: function(seasons) {
 				debugLog(seasons, "Getting Season Poster");
-				var s_index = season - 1;
-				if(seasons.seasons[s_index] != undefined && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art.poster != undefined)
+				//anoying but there is no function to just get the sepcific seson info
+				var s_index = -1;
+				for(var i = 0; i < seasons.seasons.length; i++)
+					if(seasons.seasons[i].season == season)
+						s_index = i;
+				if(s_index != -1 && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art.poster != undefined)
 				{
 					$('#season_poster').attr("src", xbmc.getThumbUrl(seasons.seasons[s_index].art.poster));
-					$('#season_poster_holder').addClass("season-art");
+					$('#season_info_holder').addClass("season-art");
 					$content.find("ul").addClass("has-season-art");
 				}
 				else	
 				{
-					$('#season_poster_holder').hide();
+					$('#season_poster').hide();
 					$content.find("ul").removeClass("has-season-art");
 				}
 
-				if(seasons.seasons[s_index] != undefined && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art['tvshow.fanart'] != undefined)				
+				if(s_index != -1 && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art['tvshow.fanart'] != undefined)				
 				{
 					$page.css("background", "url(" + xbmc.getThumbUrl(seasons.seasons[s_index].art['tvshow.fanart']) + ") no-repeat center center fixed");
 					$page.css("background-size", "cover");	
@@ -1625,7 +1645,7 @@
 </div>
 <div id="tvseasons" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
-  <div data-role="content"></div>
+  <div data-role="content" id="tv_show_content"></div>
 </div>
 <div id="tvseason" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
