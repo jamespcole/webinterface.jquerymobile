@@ -5,15 +5,23 @@
   name="jQueryMobile"
   provider-name="James Cole">
   <requires>
-    <import addon="xbmc.gui" version="2.11"/>
+    <import addon="xbmc.gui" version="4.0.0"/>
+    <import addon="xbmc.json" version="6.0.0"/>
   </requires>
   <extension
     point="xbmc.gui.webinterface"/>
-  <extension point="xbmc.addon.metadata">
+  <!--<extension point="xbmc.addon.metadata">
     <summary lang="en">jQueryMobile - jQueryMobile based Webinterface for XBMC</summary>
     <description lang="en">
 	Designed for use with Android and iOS devices
 	</description>
     <platform>all</platform>
+  </extension>-->
+  <extension
+    point="xbmc.gui.webinterface"/>
+  <extension point="xbmc.addon.metadata">
+  <summary lang="en">jQueryMobile - jQueryMobile based Webinterface for XBMC</summary>  
+  <language>en</language>
+  <platform>all</platform>
   </extension>
 </addon>
