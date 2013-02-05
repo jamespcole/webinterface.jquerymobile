@@ -391,7 +391,67 @@
 
 /*remote control*/
 
-.remote-buttons-container {
+.remote-button-holder {
+	width:100%;
+	text-align:center;
+	margin-bottom:5px;
+}
+
+.remote-button {
+	width:70px;
+	height: 70px;	
+	background-color:grey;
+	text-align:center;
+	background-color: #DDD;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#CCC));
+	background-image: -webkit-linear-gradient(top, #EEE, #CCC);
+	background-image: -moz-linear-gradient(top, #EEE, #CCC);
+	background-image: -ms-linear-gradient(top, #EEE, #CCC);
+	background-image: -o-linear-gradient(top, #EEE, #CCC);
+	background-image: linear-gradient(top, #EEE, #CCC);
+	border: 1px solid #777;
+	display:inline-block;
+	cursor:pointer;
+	cursor:hand;
+}
+
+.back-button {
+	background-image: url('../images/remote/back.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.up-button {
+	background-image: url('../images/remote/up.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.home-button {
+	background-image: url('../images/remote/home.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.left-button {
+	background-image: url('../images/remote/left.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.select-button {
+	background-image: url('../images/remote/select.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.right-button {
+	background-image: url('../images/remote/right.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/*.remote-buttons-container {
 	width:100% !important;
 	max-width:350px !important;
 }
@@ -428,13 +488,12 @@
 	height: 0; 
 	border-top: 20px solid transparent;
 	border-bottom: 20px solid transparent;			
-	border-left: 30px solid white;
-	/*margin-top:15px;*/
+	border-left: 30px solid white;	
 	margin-left:25px;
 	margin-right:0px;
 	position:relative;
 	top:18px;
-	margin-top:-5px;
+	margin-top:-4px;
 }
 
 .pause-button {
@@ -449,7 +508,6 @@
 
 .ff-button {
 	padding-left:20px;
-	/*padding-top:5px;*/
 	position:relative;
 	top:20px;
 }
@@ -459,8 +517,7 @@
 	height: 0; 
 	border-top: 15px solid transparent;
 	border-bottom: 15px solid transparent;			
-	border-left: 20px solid white;
-	/*margin-top:15px;*/
+	border-left: 20px solid white;	
 	margin-right:0px;
 	display:inline-block;
 	margin-left:-10px;
@@ -468,7 +525,6 @@
 
 .rw-button {
 	padding-left:0px;
-	/*padding-top:5px;*/
 	position:relative;
 	top:20px;
 }
@@ -479,23 +535,19 @@
 	border-top: 15px solid transparent;
 	border-bottom: 15px solid transparent;			
 	border-right: 20px solid white;
-	/*margin-top:15px;*/
 	margin-right:0px;
 	display:inline-block;
 	margin-left:-10px;
 }
 
 .home-button {
-	
-	/*padding-top:5px;*/
 	position:relative;
 	top:-5px;
 }
 
 .home-button div:first-child {
 	width: 0px;
-	height: 0; 
-	/*border-top: 20px solid transparent;*/
+	height: 0;
 	border-bottom: 15px solid white;			
 	border-left: 30px solid transparent;			
 	border-right: 30px solid transparent;
@@ -525,7 +577,6 @@
 .up-button div:first-child {
 	width: 0px;
 	height: 0; 
-	/*border-top: 25px solid transparent;*/
 	border-bottom: 35px solid white;			
 	border-left: 25px solid transparent;			
 	border-right: 25px solid transparent;
@@ -608,8 +659,28 @@
 	left:15px;
 }
 
+.fullscreen-button div:first-child {
+	background-color: white;
+	width: 40px;
+	height: 30px;
+	float: right;	
+	margin-top: 10px;
+	margin-right: 10px;
+}
+
+.fullscreen-button div:last-child {
+	background-color: white;
+	width: 30px;
+	height: 20px;
+	margin-top: 0px;
+	position: relative;
+	top: 30px;
+	border: solid grey 1px;
+	left: 10px;
+}
+
 .round-button-holder {
 	width:100%;
 	text-align:center;
 	margin-bottom:5px;
-}
+}*/

@@ -1630,7 +1630,7 @@
 	</div>
 	
 	<div data-role="footer" class="footer-docs" data-theme="c">
-			<p>&copy; 2011-2012 James P. Cole</p>
+			<p>&copy; 2013 James P. Cole</p>
 	</div>	
 	
 </div>
@@ -1718,7 +1718,32 @@
 			<input type="range" name="slider" id="volume" class="volume" value="0" min="0" max="100" data-highlight="true" />
 		</div>
 
-		<div class="round-button-holder">
+		<div class="remote-button-holder">
+			<div class="remote-button prev-button"><div class="rw-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
+			<div class="remote-button"><div class="play-button play-toggle">&nbsp;</div></div>
+			<div class="remote-button next-button"><div class="ff-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>			
+		</div>
+
+		<div class="remote-button-holder">
+			<div class="remote-button xbmc-input back-button" xbmc-input="Back"></div>
+			<div class="remote-button xbmc-input up-button" xbmc-input="Up"></div>
+			<div class="remote-button xbmc-input home-button" xbmc-input="Home"></div>
+		</div>
+
+
+		<div class="remote-button-holder">
+			<div class="remote-button xbmc-input left-button" xbmc-input="Left"></div>
+			<div class="remote-button xbmc-input select-button" xbmc-input="Select"></div>
+			<div class="remote-button xbmc-input right-button" xbmc-input="Right"></div>
+		</div>
+
+		<div class="remote-button-holder">
+			<div class="remote-button xbmc-player" xbmc-control="zoom"><div class="fullscreen-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
+			<div class="remote-button xbmc-input" xbmc-input="Down"><div class="">&nbsp;</div></div>
+			<div class="remote-button" onclick="xbmc.setMute()"><div class="">&nbsp;</div></div>
+		</div>
+
+		<!--<div class="round-button-holder">
 			<div class="round-button prev-button"><div class="rw-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
 			<div class="round-button"><div class="play-button play-toggle">&nbsp;</div></div>
 			<div class="round-button next-button"><div class="ff-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>			
@@ -1738,10 +1763,10 @@
 		</div>
 
 		<div class="round-button-holder">
-			<div class="round-button xbmc-player" xbmc-control="zoom"><div class="">&nbsp;</div></div>
+			<div class="round-button xbmc-player" xbmc-control="zoom"><div class="fullscreen-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
 			<div class="round-button xbmc-input" xbmc-input="Down"><div class="">&nbsp;</div></div>
 			<div class="round-button" onclick="xbmc.setMute()"><div class="">&nbsp;</div></div>
-		</div>
+		</div>-->
 
 		</form>
 	</div>
