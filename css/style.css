@@ -1,3 +1,25 @@
+/*this is the font fave for media icons*/
+/*@font-face {
+font-family: entypo;
+src: url('../resources/fonts/entypo/entypo.svg'),
+	url('../resources/fonts/entypo/entypo.woff'),
+	url('../resources/fonts/entypo/entypo.eot'),
+    url('../resources/fonts/entypo/entypo.ttf');
+}*/
+
+/*@font-face {
+font-family: entypo;
+src: url('../resources/fonts/entypo/entypo.svg') format('svg');
+}*/
+
+@font-face {
+  font-family: 'fontello';
+  src: url("../resources/fonts/fontello/fontello.eot");
+  src: url("../resources/fonts/fontello/fontello.eot?#iefix") format('embedded-opentype'), url("../resources/fonts/fontello/fontello.woff") format('woff'), url("../resources/fonts/fontello/fontello.ttf") format('truetype'), url("../resources/fonts/fontello/fontello.svg#fontello") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .list-with-background {
 	opacity:0.9;
 }
@@ -393,8 +415,7 @@
 
 .remote-button-holder {
 	width:100%;
-	text-align:center;
-	margin-bottom:5px;
+	text-align:center;	
 }
 
 .remote-button {
@@ -402,20 +423,24 @@
 	height: 70px;	
 	background-color:grey;
 	text-align:center;
-	background-color: #DDD;
+	/*background-color: #DDD;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#CCC));
 	background-image: -webkit-linear-gradient(top, #EEE, #CCC);
 	background-image: -moz-linear-gradient(top, #EEE, #CCC);
 	background-image: -ms-linear-gradient(top, #EEE, #CCC);
 	background-image: -o-linear-gradient(top, #EEE, #CCC);
-	background-image: linear-gradient(top, #EEE, #CCC);
+	background-image: linear-gradient(top, #EEE, #CCC);*/
 	border: 1px solid #777;
 	display:inline-block;
 	cursor:pointer;
 	cursor:hand;
+	font-family:fontello;
+	color: white;
+	font-size: 60px;
+	margin-bottom: 4px;
 }
 
-.back-button {
+/*.back-button {
 	background-image: url('../images/remote/back.png');
 	background-position: center;
 	background-repeat: no-repeat;
@@ -431,9 +456,9 @@
 	background-image: url('../images/remote/home.png');
 	background-position: center;
 	background-repeat: no-repeat;
-}
+}*/
 
-.left-button {
+/*.left-button {
 	background-image: url('../images/remote/left.png');
 	background-position: center;
 	background-repeat: no-repeat;
@@ -449,7 +474,50 @@
 	background-image: url('../images/remote/right.png');
 	background-position: center;
 	background-repeat: no-repeat;
+}*/
+
+/*.down-button {
+	background-image: url('../images/remote/down.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}*/
+
+.down-button::before {
+	content: '\e75c';
 }
+.fullscreen-button::before {
+	content: '\e744';
+}
+.mute-button::before {
+	content: '\e800';
+}
+.left-button::before {
+	content: '\e75d';
+}
+.right-button::before {
+	content: '\e75e';
+}
+
+.select-button::before {
+	content: '\f10c';
+}
+
+.back-button::before {
+	content: '\f112';
+}
+.up-button::before {
+	content: '\e75f';
+}
+
+.home-button::before {
+	content: '\2302';
+}
+
+/*.fullscreen-button {
+	background-image: url('../images/remote/fullscreen.png');
+	background-position: center;
+	background-repeat: no-repeat;
+}*/
 
 /*.remote-buttons-container {
 	width:100% !important;
