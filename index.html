@@ -27,6 +27,8 @@
 				console.log(obj);
 		}
 	}
+
+	
 	
 		$('.music-link').live("tap", function(e)
 		{
@@ -212,11 +214,7 @@
 			var category = $(e.target).attr('xbmc-category');
 			
 			$.mobile.changePage('#playlist_options?index=' + index + '&category=' + category, {transition: 'pop', role: 'dialog'}); 
-		});
-
-		$('.mute-button').live("tap", function(e) {
-			xbmc.setMute();
-		});
+		});		
 
 		$('.play-playlist-item').live("tap", function(event) {	
 				var category = 	$(this).attr('xbmc-category');
@@ -261,15 +259,15 @@
 
 			$(document).on('click', ".prev-button", function() {
 				if(currentPlayType == "audio")
-					xbmc.control({type : 'prev'});
+					xbmc.playerGoTo({to : 'previous'});
 				else
-					xbmc.input({type : 'Left'});
+					xbmc.seek({"value" : "smallbackward"});
 			});
 			$(document).on('click', ".next-button", function() {
 				if(currentPlayType == "audio")
-					xbmc.control({type : 'next'});
+					xbmc.playerGoTo({to : 'next'});
 				else
-					xbmc.input({type : 'Right', onError : showError});
+					xbmc.seek({"value" : "smallforward"});
 			});
 			//document.oncontextmenu = function() {return false;};
 			$.mobile.changePage(document.location.hash);
@@ -278,18 +276,25 @@
 
 		function togglePlayPauseButton()
 		{
-			$(".play-toggle").each(function(index, value) { 
-			   if($(this).hasClass("play-button"))
-				{
-					$(this).removeClass("play-button");
-					$(this).addClass("pause-button");
-				}
-				else
-				{
-					$(this).removeClass("pause-button");
-					$(this).addClass("play-button");
-				}
-			});
+			if(!xbmc.isUsingWebSocket)
+			{
+				$(".play-toggle").each(function(index, value) { 
+				   if($(this).hasClass("play-button"))
+					{
+						console.log("toggling to pause button");
+						$(this).removeClass("play-button");
+						$(this).addClass("pause-button");
+						currentStatus = "playing";
+					}
+					else
+					{
+						console.log("toggling to play button");
+						$(this).removeClass("pause-button");
+						$(this).addClass("play-button");
+						currentStatus = "paused";
+					}
+				});
+			}
 		}
 		//keeps track of the currently playing type
 		var currentPlayType = '';
@@ -324,19 +329,39 @@
 			currentPlayType = file.xbmcMediaType;			
 		}
 
+		var last_progress = null;//for non websocket supported browsers
+		var progress_timeout = null;//for non websocket supported browsers
 		function progressChanged(progress)
 		{
+			//for non websocket supported browsers
+			if(progress_timeout != null)
+				clearTimeout(progress_timeout);
+
+			last_progress = progress;
 			//debugLog(progress, "Progress Update");
-			$('.now_playing_time').html(progress.time + " / " + progress.total);
+			$('.now_playing_time').html(getTimeString(progress.time) + " / " + getTimeString(progress.total));
+			//if not using web sockets update the time every second
+			if(!xbmc.isUsingWebSocket && currentStatus == 'playing')
+			{
+				progress_timeout = setTimeout(function() {
+					last_progress.time++;
+					if(last_progress.time < progress.total)
+						progressChanged(last_progress)
+				}, 1000);
+			}
 		}
 
+		var currentStatus = "playing";
 		function statusChanged(status)
 		{			
+			currentStatus = status;
 			debugLog(status, "New Status");
 			if(status == 'stopped')
 			{
 				$('.now-playing').slideUp();
 				currentPlayType = '';
+				$('.play-toggle').addClass("play-button");
+				$('.play-toggle').removeClass("pause-button");
 			}
 			if(status == 'playing')
 			{
@@ -409,6 +434,21 @@
 		hash = hash & hash; // Convert to 32bit integer
 	    }
 	    return hash;
+	}
+
+	function getTimeString(time)
+	{
+		var minutes = Math.floor(time / 60);		
+
+		var seconds = time - minutes * 60;		
+
+		var hours = Math.floor(time / 3600);
+
+		return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+	}
+
+	function pad (str, max) {
+	  return (str+"").length < max ? pad("0" + str, max) : str;
 	}
 
 	//this is for parsing query strings out of the url because JQM doesn't do it automatically
@@ -1345,7 +1385,7 @@
 			else
 			{
 				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
+				markup += '<li data-role="list-divider">Artists</li>';
 				for(var i = 0; i < result.artists.length; i++)
 				{
 					markup += '<li><a href="#music_artist_albums?artistid=' + result.artists[i].artistid + '&artist_index=' + i + '">' + result.artists[i].label + '</a></li>';
@@ -1481,6 +1521,13 @@
 			options.dataUrl = urlObj.href;
 			
 			$.mobile.changePage( $page, options );
+			/*for(var i = 0; i < result.channels.length; i++)
+			{
+				xbmc.pvrGetChannelDetails({channelid : result.channels[i].channelid, onSuccess : function(channel_details) {
+					debugLog(channel_details, "Channel Details");
+				}});
+			}*/
+
 		}
 
 		function renderGlobalOptions( urlInfoObj, nav_options )
@@ -1623,15 +1670,16 @@
 					<li><a href="#sourcelist?category=video">Videos</a></li>
 					<li><a href="#sourcelist?category=music">Music</a></li>
 					<li><a href="#remote">Remote</a></li>
+					<li><a href="#about">About</a></li>
 				</ul>
 			</nav>
 		</div>
 
 	</div>
 	
-	<div data-role="footer" class="footer-docs" data-theme="c">
+	<!--<div data-role="footer" class="footer-docs" data-theme="c">
 			<p>&copy; 2013 James P. Cole</p>
-	</div>	
+	</div>	-->
 	
 </div>
 <div id="sourcelist" data-role="page" data-add-back-btn="true" class="swipable">
@@ -1713,16 +1761,17 @@
 	<div data-role="header"><h1>Remote</h1></div>
 	<div data-role="content">
 		<form>
-		<div class="remote-buttons-container">
-			
-			<input type="range" name="slider" id="volume" class="volume" value="0" min="0" max="100" data-highlight="true" />
+		<div class="remote-buttons-holder">
+			<div class="volume-holder">
+				<input type="range" name="slider" id="volume" class="volume" value="0" min="0" max="100" data-highlight="true" />
+			</div>
 		</div>
 
-		<!--<div class="remote-button-holder">
-			<div class="remote-button prev-button"><div class="rw-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-			<div class="remote-button"><div class="play-button play-toggle">&nbsp;</div></div>
-			<div class="remote-button next-button"><div class="ff-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>			
-		</div>-->
+		<div class="remote-button-holder">
+			<div class="remote-button prev-button"></div>
+			<div class="remote-button play-button play-toggle"></div>
+			<div class="remote-button next-button"></div>			
+		</div>
 
 		<div class="remote-button-holder">
 			<div class="remote-button xbmc-input back-button" xbmc-input="Back"></div>
@@ -1738,7 +1787,7 @@
 		</div>
 
 		<div class="remote-button-holder">
-			<div class="remote-button xbmc-player fullscreen-button" xbmc-control="zoom"></div>
+			<div class="remote-button fullscreen-button" onclick="xbmc.toggleFullscreen({onError:showError})"></div>
 			<div class="remote-button xbmc-input down-button" xbmc-input="Down"></div>
 			<div class="remote-button mute-button" onclick="xbmc.setMute()"></div>
 		</div>
@@ -1853,12 +1902,27 @@
 <div id="global_options" data-role="dialog" data-add-back-btn="true">
 	<div data-role="header"><h1>Options</h1></div>
 	<div data-role="content">
+		<a data-role="button" href="/">Home</a>
 		<a data-role="button" href="#now_playing">Now Playing</a>
 		<a data-role="button" href="#remote">Remote</a>
 		<a data-role="button" id="playlist_button" href="#playlist">Playlist</a>
 		<a data-rel="back" data-role="button" href="#">Cancel</a>
 	</div>
 </div>
+
+<div id="about" data-role="dialog" data-add-back-btn="true">
+	<div data-role="header"><h1>About</h1></div>
+	<div data-role="content">
+		<h1>jQuery Mobile XBMC Remote</h1>
+		<h2>By James Cole</h2>
+		<p>My Blog: <a href="http://setupguides.blogspot.com" target="_blank">SetupGuides</a></p>
+		<p>Project Home: <a href="https://github.com/jamespcole/webinterface.jquerymobile" target="_blank">GitHub</a></p>
+		<p>Special thanks to the XBMC team for making such an amazing bit of software, the jQuery mobile team and the awxi web interface devs for their XBMC js lib.</p>
+		<a data-rel="back" data-role="button" href="#">Close</a>
+	</div>
+</div>
+
+
 
 
 </body>

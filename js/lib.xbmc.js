@@ -18,8 +18,7 @@
 
 var xbmc = {};
 
-(function($) {
-
+(function($) {  
 	/*******
    * String Functions
    *******/
@@ -61,7 +60,7 @@ var xbmc = {};
    |
   \* ########################### */
   $.extend(xbmc, {
-
+    isUsingWebSocket : true,
     movieThumbType: 'Poster',
     tvshowThumbType: 'Banner',
 
@@ -838,6 +837,19 @@ var xbmc = {};
       );
     },
     
+    toggleFullscreen: function(options) {
+      var settings = {
+        onSuccess: null,
+        onError: null
+      };
+       $.extend(settings, options);
+      xbmc.sendCommand(
+        '{"jsonrpc": "2.0", "method": "GUI.SetFullscreen", "params": {"fullscreen" : "toggle"}, "id": 1}',
+        settings.onSuccess,
+        settings.onError
+      );
+    },
+    
     shutdown: function(options) {
       var settings = {
         type: 'shutdown',
@@ -1100,6 +1112,24 @@ var xbmc = {};
         if (xbmc.activePlayerid == 1 || xbmc.activePlayerid == 0) {
           xbmc.sendCommand(
             '{"jsonrpc": "2.0", "method": "Player.Seek", "params": {"value": ' + settings.percentage + ', "playerid": ' + xbmc.activePlayerid + '}, "id": 1}',
+
+            settings.onSuccess,
+            settings.onError
+          );
+        }
+    },
+
+    seek: function(options) {
+      var settings = {
+        value: "smallforward",
+        onSuccess: null,
+        onError: null
+      };
+      $.extend(settings, options);
+
+        if (xbmc.activePlayerid == 1 || xbmc.activePlayerid == 0) {
+          xbmc.sendCommand(
+            '{"jsonrpc": "2.0", "method": "Player.Seek", "params": {"value": "' + settings.value + '", "playerid": ' + xbmc.activePlayerid + '}, "id": 1}',
 
             settings.onSuccess,
             settings.onError
@@ -2624,18 +2654,18 @@ var xbmc = {};
             function (response) {
               if (navigator.appVersion.indexOf("MSIE") == -1) {
                 if ("WebSocket" in window) {
-                  xbmc.wsListener();
+                  xbmc.wsListener();                  
                 }
               } else {
                 setTimeout($.proxy(xbmc.periodicUpdater, "periodicStep"), 20);
-                console.log('No websocket support');
+                console.log('No websocket support');                
               }
             }
           );
       },
     
       periodicStep: function() {
-        
+        xbmc.isUsingWebSocket = false;
         //Stop changed status firering by only setting vars once!
         if (typeof xbmc.periodicUpdater.lastVolume === 'undefined') {
           $.extend(xbmc.periodicUpdater, {
@@ -2923,14 +2953,13 @@ var xbmc = {};
                 //PVR reports no file attrib. Copy title to file
                 if (currentItem.type == 'channel') { currentItem.file = currentItem.title };
                 
-                if ( currentItem.fanart != '' && xbmc.$backgroundFanart != xbmc.getThumbUrl(currentItem.fanart) && useFanart && !awxUI.settings.useXtraFanart) {
+                if ( currentItem.fanart != '' && xbmc.$backgroundFanart != xbmc.getThumbUrl(currentItem.fanart) && useFanart) {
                   xbmc.$backgroundFanart = xbmc.getThumbUrl(currentItem.fanart);
-                  $('#firstBG').css('background-image', 'url(' + xbmc.$backgroundFanart + ')');
+                  
                                       //TODO add check if same album don't re-query extra.
-                } else if (currentItem.fanart != '' && awxUI.settings.useXtraFanart) {
+                } else if (currentItem.fanart != '') {
                   if (xbmc.$backgroundFanart == '') {
-                    xbmc.$backgroundFanart = xbmc.getThumbUrl(currentItem.fanart);
-                    $('#firstBG').css('background-image', 'url(' + xbmc.$backgroundFanart + ')');
+                    xbmc.$backgroundFanart = xbmc.getThumbUrl(currentItem.fanart);                    
                   };
                   xbmc.getExtraArt({path: currentItem.file, type: 'extrafanart', tvid: currentItem.tvshowid, library: currentItem.type}, function(xart) { xbmc.xart = xart; xbmc.switchFanart() } );
                 };
@@ -3020,7 +3049,7 @@ var xbmc = {};
 
         }
 
-        setTimeout($.proxy(this, "periodicStep"), 10000);
+        setTimeout($.proxy(this, "periodicStep"), 5000);
       }
     } // END xbmc.periodicUpdater
   }); // END xbmc
@@ -3743,6 +3772,7 @@ var xbmc = {};
           }
         };
         ws.onclose = function (e) {
+          console.log(e);
           console.log('socket closed - assume crash/quit');
           //Check to see if XBMC /is/ running
           xbmc.sendCommand(
