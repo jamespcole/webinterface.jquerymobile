@@ -28,7 +28,38 @@
 		}
 	}
 
-	
+	//this function is so that if we queue something and the playlist is empty it will start automatically
+	function addToPlayList(options)
+	{
+		if(options.playlistid == undefined || options.playlistid == 0)
+		{
+			xbmc.getAudioPlaylist({onSuccess : function(result) {
+				var startPlaylist = false;
+				if(!result.items)
+				{
+					startPlaylist = true;
+					options.onSuccess = function(result) {
+						xbmc.playlistPlay({item: 0});
+					};
+				}
+				xbmc.playlistAdd(options);
+			}});				
+		}
+		else
+		{
+			xbmc.getVideoPlaylist({onSuccess : function(result) {
+				var startPlaylist = false;
+				if(!result.items)
+				{
+					startPlaylist = true;
+					options.onSuccess = function(result) {
+						xbmc.playlistPlay({item: 0, playlistid : options.playlistid});
+					};
+				}
+				xbmc.playlistAdd(options);
+			}});				
+		}
+	}
 	
 		$('.music-link').live("tap", function(e)
 		{
@@ -1144,7 +1175,7 @@
 			markup += "<p>" + result.plot + "</p>";
 
 			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'episodeid\', itemId : ' + episodeid + ', onError : showError})" data-role="button" data-inline="true">Play Episode</a>';
-			markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Episode</a>';
+			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Episode</a>';
 
 			markup += '</div>';
 			markup += '</div>';
@@ -1327,7 +1358,7 @@
 				markup += '<h2>' + result.artist + '</h2>';
 				markup += '<h3>' + result.label + '</h3>';
 				markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Play Album</a>';
-				markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Queue Album</a>';
+				markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Queue Album</a>';
 				markup += '</div>'; //end album_info_inner
 				$('#album_info').html(markup);
 				content.find( ":jqmData(role=button)" ).button();
@@ -1417,7 +1448,7 @@
 
 			var markup = '';
 			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Play Song</a>';
-			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Queue Song</a>';
+			markup += '<a data-role="button" href="javascript:void(0)" onclick="addToPlayList({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Queue Song</a>';
 			markup += '<a data-rel="back" data-role="button" href="#">Cancel</a>';
 			
 			$content.html(markup);
@@ -1629,7 +1660,7 @@
 			markup += "<p>" + result.plot + "</p>";
 
 			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'movieid\', itemId : ' + movieid + ', onError : showError})" data-role="button" data-inline="true">Play Movie</a>';
-			markup += '<a href="javascript:void(0)" onclick="xbmc.playlistAdd({item : \'movieid\', itemId : ' + movieid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Movie</a>';
+			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'movieid\', itemId : ' + movieid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Movie</a>';
 			markup += "</div>";
 			markup += "</div>";
 			markup += "</div>";
