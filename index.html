@@ -1823,31 +1823,6 @@
 			<div class="remote-button mute-button" onclick="xbmc.setMute()"></div>
 		</div>
 
-		<!--<div class="round-button-holder">
-			<div class="round-button prev-button"><div class="rw-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-			<div class="round-button"><div class="play-button play-toggle">&nbsp;</div></div>
-			<div class="round-button next-button"><div class="ff-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>			
-		</div>
-
-		<div class="round-button-holder">
-			<div class="round-button xbmc-input" xbmc-input="Back"><div class="back-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-			<div class="round-button xbmc-input" xbmc-input="Up"><div class="up-button"><div>&nbsp;</div></div></div>
-			<div class="round-button xbmc-input" xbmc-input="Home"><div class="home-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-		</div>
-
-
-		<div class="round-button-holder">
-			<div class="round-button xbmc-input" xbmc-input="Left"><div class="left-button"><div>&nbsp;</div></div></div>
-			<div class="round-button xbmc-input" xbmc-input="Select"><div class="select-button"><div>&nbsp;</div></div></div>
-			<div class="round-button xbmc-input" xbmc-input="Right"><div class="right-button"><div>&nbsp;</div></div></div>
-		</div>
-
-		<div class="round-button-holder">
-			<div class="round-button xbmc-player" xbmc-control="zoom"><div class="fullscreen-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-			<div class="round-button xbmc-input" xbmc-input="Down"><div class="">&nbsp;</div></div>
-			<div class="round-button" onclick="xbmc.setMute()"><div class="">&nbsp;</div></div>
-		</div>-->
-
 		</form>
 	</div>
 	<div data-role="footer" data-id="remote_footer" data-position="fixed" class="now-playing" style="display:none;">
@@ -1879,12 +1854,15 @@
 			</div>
 		</center>
 		<div style="width:100%;text-align:center">
-			<div class="round-button prev-button"><div class="rw-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>
-			<div class="round-button"><div class="play-button play-toggle">&nbsp;</div></div>
-			<div class="round-button next-button"><div class="ff-button"><div>&nbsp;</div><div>&nbsp;</div></div></div>			
+			<div class="remote-button prev-button"></div>
+			<div class="remote-button play-button play-toggle"></div>
+			<div class="remote-button next-button"></div>
 		</div>
-		<input type="range" name="slider" id="volume_np" class="volume" value="0" min="0" max="100" data-highlight="true" />
-
+		<div class="remote-buttons-holder">
+			<div class="volume-holder">
+				<input type="range" name="slider" id="volume_np" class="volume" value="0" min="0" max="100" data-highlight="true" />
+			</div>
+		</div>
 		<a href="#remote" data-role="button" data-transition="flip">Remote</a>
 	</div>
 

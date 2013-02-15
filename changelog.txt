@@ -1,1 +1,3 @@
-This is the first version
+### 0.0.1
+2013-02-15 James Cole <jamespcole.work@gmail.com>
+	* This is the first version of the plugin, this will be updated with all changes following the first public release
