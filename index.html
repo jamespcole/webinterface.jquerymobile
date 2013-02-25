@@ -10,6 +10,7 @@
 	
 	<script src="js/jquerymobile/jquery-1.8.2.min.js"></script>
 	<script src="js/jquerymobile/jquery.mobile-1.2.0.min.js"></script>
+	<script src="js/lang.js"></script>
 	<script src="js/lib.xbmc.js"></script>
 
 	<script type="text/javascript">
@@ -517,11 +518,6 @@
 			$.mobile.loading("hide");
 		});
 
-		//these global vars hold info about the page call so it can be accessed in the JSON RPC callback handler
-		//not a great solution but it works
-		var urlObj = null;
-		var options = null;
-
 		//this is for handling dynamically generated pages, see http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html
 		$(document).bind( "pagebeforechange", function( e, data ) {
 
@@ -631,22 +627,22 @@
 			}
 		});
 
-		function showSourceList( urlInfoObj, nav_options )
+		function showSourceList( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 						
 			var categoryName = qs['category'];
 			if ( categoryName ) 
 			{
-				xbmc.getSources({onSuccess: renderSourceList, media:categoryName});
-			}			
+				xbmc.getSources({media:categoryName, onSuccess: function(result) {
+						renderSourceList(result, urlObj, options)
+					}
+				});
+			}
 		}
 
-		function renderSourceList(result)
+		function renderSourceList(result, urlObj, options)
 		{
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
@@ -681,12 +677,9 @@
 			$.mobile.changePage( $page, options );
 		}
 
-		function showFileList( urlInfoObj, nav_options )
+		function showFileList( urlObj, options  )
 		{
 			$.mobile.showPageLoadingMsg();
-			
-			urlObj = urlInfoObj;
-			options = nav_options;
 				
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
@@ -703,12 +696,15 @@
 			}
 			else
 			{
-				xbmc.getDirectory({directory: file, onSuccess: renderFileList, media:category, onError:showError});
+				xbmc.getDirectory({directory: file, media:category, onError:showError, onSuccess: function(result) {
+					  	renderFileList(result, urlObj, options)
+					}
+				});
 			}
 			
 		}
 
-		function renderFileList(result)
+		function renderFileList(result, urlObj, options)
 		{			
 			$.mobile.showPageLoadingMsg();
 			debugLog(result, "Loading file list");
@@ -776,10 +772,8 @@
 			$.mobile.loading( 'hide' );
 		}
 
-		function showPlaylist(urlInfoObj, nav_options )
-		{
-			urlObj = urlInfoObj;
-			options = nav_options;
+		function showPlaylist(urlObj, options)
+		{			
 			var qs = $.parseQuerystring(urlObj.hash);
 			debugLog(null, "Loading playlist for " + currentPlayType);
 			if(qs['category'] == undefined)
@@ -787,14 +781,22 @@
 			if(qs['category'] == "")
 				qs['category'] = "audio";
 			if(qs['category'] == "music" || qs['category'] == "audio")
-				xbmc.getAudioPlaylist({onSuccess : renderPlaylist});
+			{
+				xbmc.getAudioPlaylist({onSuccess : function(result) {
+						renderPlaylist(result, urlObj, options);
+					}
+				});
+			}
 			else if(qs['category'] == "video")
-				xbmc.getVideoPlaylist({onSuccess : renderPlaylist});
-
-
+			{
+				xbmc.getVideoPlaylist({onSuccess : function(result) {
+						renderPlaylist(result, urlObj, options);
+					}
+				});
+			}
 		}
 
-		function renderPlaylist(result)
+		function renderPlaylist(result, urlObj, options)
 		{
 			debugLog(result, "Playlist Data");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -848,11 +850,8 @@
 			$.mobile.loading("hide");
 		}
 
-		function showFileOptions( urlInfoObj, nav_options )
-		{			
-			urlObj = urlInfoObj;
-			options = nav_options;
-				
+		function showFileOptions( urlObj, options )
+		{										
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 			var category = qs['category'];			
@@ -874,11 +873,8 @@
 			$.mobile.changePage( $page, options );
 		}
 
-		function showFolderOptions( urlInfoObj, nav_options )
+		function showFolderOptions( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;
-				
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);			
 			var category = qs['category'];
@@ -899,11 +895,8 @@
 			
 			$.mobile.changePage( $page, options );
 		}
-		function showPlaylistOptions( urlInfoObj, nav_options )
+		function showPlaylistOptions( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;
-				
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 			if(qs['category'] == undefined)
@@ -930,19 +923,19 @@
 		}
 
 		//TV SHOW STUFF
-		function showTVShows( urlInfoObj, nav_options )
-		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
+		function showTVShows( urlObj, options )
+		{			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 			
-			xbmc.getTvShows({onSuccess: renderTVShowList});	
+			xbmc.getTvShows({onSuccess: function(result) {
+					renderTVShowList(result, urlObj, options);
+				}
+			});	
 		}
 
-		function renderTVShowList(result)
-		{
+		function renderTVShowList(result, urlObj, options)
+		{			
 			debugLog(result, "Loading TV Shows");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);						
@@ -977,20 +970,20 @@
 			$.mobile.changePage( $page, options );			
 		}
 
-		function showTVSeasons( urlInfoObj, nav_options )
+		function showTVSeasons( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var tvshowid = qs['tvshowid'];
 			
-			xbmc.getSeasons({onSuccess: renderTVSeasonsList, tvshowid : tvshowid, onError: showError});	
+			xbmc.getSeasons({tvshowid : tvshowid, onError: showError, onSuccess: function(result) {
+					renderTVSeasonsList(result, urlObj, options);
+				}
+			});	
 		}
 
-		function renderTVSeasonsList(result)
+		function renderTVSeasonsList(result, urlObj, options)
 		{
 			debugLog(result, "Loading TV Seasons");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1054,21 +1047,21 @@
 			}});			
 		}
 
-		function showTVSeason( urlInfoObj, nav_options )
-		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
+		function showTVSeason( urlObj, options )
+		{			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var tvshowid = qs['tvshowid'];
 			var season = qs['season'];
 			
-			xbmc.getEpisodes({onSuccess: renderTVSeasonList, item : 'tvshowid', itemId : tvshowid, season : season, onError: showError});	
+			xbmc.getEpisodes({item : 'tvshowid', itemId : tvshowid, season : season, onError: showError, onSuccess: function(result) {
+					renderTVSeasonList(result, urlObj, options)
+				}
+			});	
 		}
 
-		function renderTVSeasonList(result)
+		function renderTVSeasonList(result, urlObj, options)
 		{
 			debugLog(result, "Loading TV Season Episodes");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1085,15 +1078,12 @@
 				markup = "There are no episodes available for this season.";
 			}
 			else
-			{
-				//markup += '<h2 id="season_label"></h2>';
+			{				
 				markup += '<div id="season_info_holder"><h2 id="season_label"></h2><img id="season_poster" /></div>';
 				markup += "<ul data-role='listview' data-inset='true'>";
 				markup += '<li data-role="list-divider">Episodes</li>';
 				for(var i = 0; i < result.episodes.length; i++)
-				{
-					//forward slashes mess up the query string so replace them 
-					//and change back later(even though they are valid jqmobile doesn't like them)					
+				{						
 					markup += '<li><a href="/#episode_info?episodeid=' + result.episodes[i].episodeid + '">' + result.episodes[i].label + '</a></li>';
 				}
 				markup += "</ul>";
@@ -1140,20 +1130,20 @@
 			}});				
 		}
 
-		function showEpisodeInfo( urlInfoObj, nav_options )
-		{			
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
+		function showEpisodeInfo( urlObj, options )
+		{	
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var episodeid = qs['episodeid'];			
 			
-			xbmc.getEpisodeDetails({onSuccess: renderEpisodeInfo, episodeid : episodeid});	
+			xbmc.getEpisodeDetails({episodeid : episodeid, onSuccess: function(result) {
+					renderEpisodeInfo(result, urlObj, options);
+				}
+			});
 		}
 
-		function renderEpisodeInfo(result)
+		function renderEpisodeInfo(result, urlObj, options)
 		{
 			debugLog(result, "Loading Episode");
 			var $page = $( pageSelector );
@@ -1201,11 +1191,8 @@
 
 		//declare this global so we don't have to make a second call to get the album info
 		var albums_loaded = false;
-		function showAlbums( urlInfoObj, nav_options )
+		function showAlbums(urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
@@ -1215,7 +1202,10 @@
 			if(artistid == undefined && genreid == undefined)
 			{
 				if(!albums_loaded || !useCaching)	
-					xbmc.getAlbums({onSuccess: renderAlbumList, onError : showError});
+					xbmc.getAlbums({onError : showError, onSuccess: function(result) {
+							renderAlbumList(result, urlObj, options)
+						}
+					});
 				else
 				{
 					$.mobile.loading( 'show' );
@@ -1226,10 +1216,13 @@
 				}
 			}
 			else if(artistid != undefined)
-				xbmc.getAlbums({onSuccess: renderAlbumList, onError : showError, item : "artistid", itemId : artistid});
+				xbmc.getAlbums({onError : showError, item : "artistid", itemId : artistid, onSuccess: function(result) {
+						renderAlbumList(result, urlObj, options)
+					}
+				});
 		}
 		
-		function renderAlbumList(result)
+		function renderAlbumList(result, urlObj, options)
 		{
 			debugLog(result, "Loading Albums");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1299,20 +1292,20 @@
 			}, artistid : artistid});
 		}
 
-		function showAlbum( urlInfoObj, nav_options )
+		function showAlbum(urlObj, options)
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
 			var albumid = qs['albumid'];
 			
-			xbmc.getSongs({onSuccess: renderAlbum, item : "albumid", itemId : albumid});	
+			xbmc.getSongs({item : "albumid", itemId : albumid, onSuccess: function(result) {
+					renderAlbum(result, urlObj, options);
+				}
+			});	
 		}
 
-		function renderAlbum(result)
+		function renderAlbum(result, urlObj, options)
 		{
 			debugLog(result, "Loading Album Songs");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1371,11 +1364,8 @@
 
 		//cache the artists
 		var artists = null;
-		function showArtists( urlInfoObj, nav_options )
-		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
+		function showArtists(urlObj, options)
+		{						
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			var genreid = qs['genreid'];			
@@ -1383,7 +1373,12 @@
 			if(genreid == undefined)
 			{
 				if(artists == null || useCaching == false)	
-					xbmc.getArtists({onSuccess: renderArtistList, genreid : genreid});	
+				{
+					xbmc.getArtists({onSuccess: function(result) { 
+							renderArtistList(result, urlObj, options);
+						}
+					});	
+				}
 				else
 				{					
 					$.mobile.loading( 'show' );
@@ -1394,11 +1389,15 @@
 				}
 			}
 			else if(genreid != undefined)
-				xbmc.getArtists({onSuccess: renderArtistList, genreid : genreid});	
-			
+			{
+				xbmc.getArtists({genreid : genreid, onSuccess: function(result) { 
+						renderArtistList(result, urlObj, options);
+					}
+				});	
+			}
 		}
 		
-		function renderArtistList(result)
+		function renderArtistList(result, urlObj, options)
 		{
 			artists = result;
 			debugLog(result, "Loading Artists");
@@ -1432,11 +1431,8 @@
 			$.mobile.changePage( $page, options );
 		}
 
-		function showSongOptions( urlInfoObj, nav_options )
+		function showSongOptions( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
@@ -1463,18 +1459,18 @@
 		
 		//PVR
 
-		function showChannelGroups( urlInfoObj, nav_options )
+		function showChannelGroups( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);			
 			
-			xbmc.pvrGetChannelGroups({onSuccess: renderChannelGroups, onError : showError});				
+			xbmc.pvrGetChannelGroups({onError : showError, onSuccess: function(result) {
+					renderChannelGroups(result, urlObj, options);
+				}
+			});
 		}
 
-		function renderChannelGroups(result)
+		function renderChannelGroups(result, urlObj, options)
 		{
 			debugLog(result, "Channel Groups");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1507,21 +1503,21 @@
 			$.mobile.changePage( $page, options );
 		}		
 
-		function showChannels( urlInfoObj, nav_options )
+		function showChannels( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			var channelgroupid = qs['channelgroupid'];
 			
-			xbmc.pvrGetChannels({onSuccess: renderChannels, channelgroupid : channelgroupid});				
+			xbmc.pvrGetChannels({channelgroupid : channelgroupid, onSuccess: function(result) {
+					renderChannels(result, urlObj, options);
+				}
+			});
 		}
 
 
-		function renderChannels(result)
+		function renderChannels(result, urlObj, options)
 		{
 			debugLog(result, "Loading Channels");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1561,11 +1557,8 @@
 
 		}
 
-		function renderGlobalOptions( urlInfoObj, nav_options )
+		function renderGlobalOptions( urlObj, options )
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);
@@ -1584,19 +1577,19 @@
 		}
 
 		/*movies*/
-		function showMovies(urlInfoObj, nav_options)
+		function showMovies(urlObj, options)
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;				
-			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			
-			xbmc.getMovies({onSuccess: renderMovies, onError : showError});
+			xbmc.getMovies({onError : showError, onSuccess: function(result) {
+					renderMovies(result, urlObj, options);
+				}
+			});
 		}
 
-		function renderMovies(result)
+		function renderMovies(result, urlObj, options)
 		{
 			debugLog(result, "Loading Movies");
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
@@ -1629,19 +1622,18 @@
 			$.mobile.changePage( $page, options );
 		}
 
-		function showMovie(urlInfoObj, nav_options)
+		function showMovie(urlObj, options)
 		{
-			urlObj = urlInfoObj;
-			options = nav_options;
-			
 			var qs = $.parseQuerystring(urlObj.hash);			
 			
-			xbmc.getMovieInfo({onSuccess: renderMovie, onError : showError, movieid : qs['movieid']});
+			xbmc.getMovieInfo({onError : showError, movieid : qs['movieid'], onSuccess: function(result) {
+					renderMovie(result, urlObj, options);
+				}
+			});
 		}
 
-		function renderMovie(result)
-		{
-			
+		function renderMovie(result, urlObj, options)
+		{			
 			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 			var qs = $.parseQuerystring(urlObj.hash);
 			debugLog(result, "Loading Movie " + qs['movieid']);	
@@ -1692,7 +1684,7 @@
 		<div class="content-primary">
 			<nav>
 				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
-					<li data-role="list-divider">XBMC</li>
+					<li data-role="list-divider">Library</li>
 					<li><a href="#tvshows">TV Shows</a></li>
 					<li><a href="#music">Music</a></li>					
 					<li id="PVR_menu_item"><a href="#channel_groups">Live TV</a></li>
@@ -1700,6 +1692,7 @@
 					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-b">Files</li>
 					<li><a href="#sourcelist?category=video">Videos</a></li>
 					<li><a href="#sourcelist?category=music">Music</a></li>
+					<li data-role="list-divider">Other</li>
 					<li><a href="#remote">Remote</a></li>
 					<li><a href="#about">About</a></li>
 				</ul>
@@ -1863,7 +1856,7 @@
 				<input type="range" name="slider" id="volume_np" class="volume" value="0" min="0" max="100" data-highlight="true" />
 			</div>
 		</div>
-		<a href="#remote" data-role="button" data-transition="flip">Remote</a>
+		<!--<a href="#remote" data-role="button" data-transition="flip">Remote</a>-->
 	</div>
 
 </div>
