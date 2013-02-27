@@ -10,8 +10,10 @@
 	
 	<script src="js/jquerymobile/jquery-1.8.2.min.js"></script>
 	<script src="js/jquerymobile/jquery.mobile-1.2.0.min.js"></script>
+	<script src="js/jed.js"></script>
 	<script src="js/lang.js"></script>
 	<script src="js/lib.xbmc.js"></script>
+
 
 	<script type="text/javascript">
 	var useCaching = true;//cache large file lists - this speeds up load times
@@ -260,6 +262,19 @@
 			});
 		
 		$(document).ready(function() {
+			xbmc_jqm.lang.getLanguages(function (result) {
+				debugLog(result, "Checking languages");
+			});
+			xbmc_jqm.lang.setLanguage("en", function(ok) {
+				debugLog(ok, "Language Set");
+				if(ok)
+				{
+					$('[lang-id]').each(function(index){
+					    $(this).html(xbmc_jqm.lang.get($(this).attr('lang-id'), 'Text'));
+					});
+				}
+			});
+
 
 			xbmc.periodicUpdater.addVolumeChangedListener(volumeChanged);
 			xbmc.periodicUpdater.addPlayerStatusChangedListener(statusChanged);
@@ -279,12 +294,14 @@
 						$('#PVR_menu_item').hide();
 					}});	
 			}});
+
 			/* $(".swipable").live('swiperight', function() {
 				history.back();
 			  });
 			$(".swipable").live('swipeleft', function() {
 				history.forward();
 			  });*/
+
 			$(document).on('click', ".play-toggle", function() {
 				xbmc.control({'type' : 'play', onSuccess : togglePlayPauseButton})
 			});
@@ -1601,7 +1618,7 @@
 			var markup = '';			
 			if(result.limits.total == 0 || result.movies.length == 0)
 			{
-				markup = "There are no movies in your library.";
+				markup = xbmc_jqm.lang.get('no_movies', 'Text');
 			}
 			else
 			{
@@ -1684,17 +1701,17 @@
 		<div class="content-primary">
 			<nav>
 				<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
-					<li data-role="list-divider">Library</li>
-					<li><a href="#tvshows">TV Shows</a></li>
-					<li><a href="#music">Music</a></li>					
-					<li id="PVR_menu_item"><a href="#channel_groups">Live TV</a></li>
-					<li><a href="#movies">Movies</a></li>
-					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-b">Files</li>
-					<li><a href="#sourcelist?category=video">Videos</a></li>
-					<li><a href="#sourcelist?category=music">Music</a></li>
-					<li data-role="list-divider">Other</li>
-					<li><a href="#remote">Remote</a></li>
-					<li><a href="#about">About</a></li>
+					<li data-role="list-divider" lang-id="library">Library</li>
+					<li><a href="#tvshows" lang-id="tv_shows">TV Shows</a></li>
+					<li><a href="#music" lang-id="music">Music</a></li>					
+					<li id="PVR_menu_item"><a href="#channel_groups" lang-id="live_tv">Live TV</a></li>
+					<li><a href="#movies" lang-id="movies">Movies</a></li>
+					<li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-b" lang-id="files">Files</li>
+					<li><a href="#sourcelist?category=video" lang-id="video_files">Videos</a></li>
+					<li><a href="#sourcelist?category=music" lang-id="music_files">Music</a></li>
+					<li data-role="list-divider" lang-id="other">Other</li>
+					<li><a href="#remote" lang-id="remote">Remote</a></li>
+					<li><a href="#about" lang-id="about">About</a></li>
 				</ul>
 			</nav>
 		</div>
@@ -1913,14 +1930,14 @@
 </div>
 
 <div id="about" data-role="dialog" data-add-back-btn="true">
-	<div data-role="header"><h1>About</h1></div>
+	<div data-role="header"><h1 lang-id="about">About</h1></div>
 	<div data-role="content">
 		<h1>jQuery Mobile XBMC Remote</h1>
 		<h2>By James Cole</h2>
 		<p>My Blog: <a href="http://setupguides.blogspot.com" target="_blank">SetupGuides</a></p>
 		<p>Project Home: <a href="https://github.com/jamespcole/webinterface.jquerymobile" target="_blank">GitHub</a></p>
 		<p>Special thanks to the XBMC team for making such an amazing bit of software, the jQuery mobile team and the awxi web interface devs for their XBMC js lib.</p>
-		<a data-rel="back" data-role="button" href="#">Close</a>
+		<a data-rel="back" data-role="button" href="#" lang-id="close">Close</a>
 	</div>
 </div>
 

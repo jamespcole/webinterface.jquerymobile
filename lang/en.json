@@ -13,4 +13,18 @@
 "Content-Transfer-Encoding":" 8bit",
 "Project-Id-Version":" XBMC_JQM"},
 
-"Back\u0004Titles":[null,""]}
+"Label\u0004Back":[null,""],
+"Text\u0004library":[null,"Library"],
+"Text\u0004music":[null,"Music"],
+"Text\u0004tv_shows":[null,"TV Shows"],
+"Text\u0004live_tv":[null,"Live TV"],
+"Text\u0004movies":[null,"Movies"],
+"Text\u0004files":[null,"Files"],
+"Text\u0004video_files":[null,"Videos"],
+"Text\u0004music_files":[null,"Music"],
+"Text\u0004other":[null,"Other"],
+"Text\u0004remote":[null,"Remote"],
+"Text\u0004about":[null,"About"],
+"Text\u0004close":[null,"Close"],
+"Text\u0004no_movies":[null,"There are no movies in your library."]
+}

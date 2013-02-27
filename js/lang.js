@@ -2,13 +2,14 @@
    * Languages
    * This is a modified vaersion of the awxi language stuff
    *####################################################################*/
-var lang = {};
+var xbmc_jqm = {};
+//var lang = {};
 
-  $.extend(lang, {
-    lang: {
+  $.extend(xbmc_jqm, {
+      lang: {
       languages: {},
       curLang: '',
-      langMsg: '',
+      langMsg: '',      
 
       add: function(newLang) {
         // e.g. newLang = {langage:'German', short:'de', author:'MKay', values: {...}}
@@ -29,12 +30,14 @@ var lang = {};
         this.curLang = lang;
         var ld = 'lang/' + lang + '.json';
         $.getJSON(ld, function(data) {
-          mkf.lang.langMsg = new Jed({
+          console.log(data);
+          
+          xbmc_jqm.lang.langMsg = new Jed({
             locale_data: { "messages": data }, 
             "missing_key_callback" : function(key) {
             console.error(key)
             }
-          }); 
+          });          
           callback(true)
         })
         .error(function() { callback(false) });
@@ -43,13 +46,13 @@ var lang = {};
       getLanguages: function(callback) {
         xbmc.sendCommand(
         '{ "method": "Addons.GetAddonDetails", "id": 0, "jsonrpc": "2.0", "params": { "addonid": "webinterface.jquerymobile", "properties": ["path"] } }',
-        function(awxi) {
-          var langPath = awxi.result.addon.path + '/lang';
+        function(jqm_xbmc) {
+          var langPath = jqm_xbmc.result.addon.path + '/lang';
           xbmc.getDirectory({
             media: 'files',
             directory: langPath,
             onError: function() {
-              mkf.messageLog.show(mkf.lang.get('Failed to retrieve list!', 'Popup message'), mkf.messageLog.status.error, 5000);
+              //mkf.messageLog.show(mkf.lang.get('Failed to retrieve list!', 'Popup message'), mkf.messageLog.status.error, 5000);
               callback(false)
             },
             onSuccess: function(langs) {
@@ -80,7 +83,7 @@ var lang = {};
           });
         },
         function() {
-          mkf.messageLog.show(mkf.lang.get('Failed to retrieve list!', 'Popup message'), mkf.messageLog.status.error, 5000);
+          //mkf.messageLog.show(mkf.lang.get('Failed to retrieve list!', 'Popup message'), mkf.messageLog.status.error, 5000);
         }
       );
 
