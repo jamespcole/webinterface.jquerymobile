@@ -262,8 +262,19 @@
 			});
 		
 		$(document).ready(function() {
+			//this builds the language menu in settings
 			xbmc_jqm.lang.getLanguages(function (result) {
-				debugLog(result, "Checking languages");
+				debugLog(result, "Checking languages");	
+				var lang_menu = $('#languages');
+				var markup = '<fieldset data-role="controlgroup">';
+				markup += '<legend>Choose language:</legend>';
+				for(var i = 0; i < result.length; i++)
+				{
+					markup += '<input type="radio" name="radio-choice" id="radio-' + result[i].code + '" value="choice-1" />';
+					markup += '<label for="radio-' + result[i].code + '">' + result[i].Language + '</label>';					
+				}
+				markup += '</fieldset>';
+				lang_menu.html(markup);
 			});
 			xbmc_jqm.lang.setLanguage("en", function(ok) {
 				debugLog(ok, "Language Set");
@@ -1499,7 +1510,7 @@
 			var markup = '';			
 			if(result == null || result.limits.total == 0 || result.channelgroups.length == 0)
 			{
-				markup = "There channels available.";
+				markup = xbmc_jqm.lang.get('no_channels', 'Text');
 			}
 			else
 			{
@@ -1546,7 +1557,7 @@
 			var markup = '';			
 			if(result == null || result.limits.total == 0 || result.channels.length == 0)
 			{
-				markup = "There channels available.";
+				markup = xbmc_jqm.lang.get('no_channels', 'Text');
 			}
 			else
 			{
@@ -1711,6 +1722,7 @@
 					<li><a href="#sourcelist?category=music" lang-id="music_files">Music</a></li>
 					<li data-role="list-divider" lang-id="other">Other</li>
 					<li><a href="#remote" lang-id="remote">Remote</a></li>
+					<li><a href="#settings" lang-id="settings">Settings</a></li>
 					<li><a href="#about" lang-id="about">About</a></li>
 				</ul>
 			</nav>
@@ -1941,6 +1953,16 @@
 	</div>
 </div>
 
+<div id="settings" data-role="dialog" data-add-back-btn="true">
+	<div data-role="header"><h1 lang-id="about">Settings</h1></div>
+	<div data-role="content">
+		<h2>Settings</h2>
+		<div id="languages">
+
+		</div>
+		<a data-rel="back" data-role="button" href="#" lang-id="close">Close</a>
+	</div>
+</div>
 
 
 

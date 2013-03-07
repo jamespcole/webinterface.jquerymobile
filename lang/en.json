@@ -25,6 +25,8 @@
 "Text\u0004other":[null,"Other"],
 "Text\u0004remote":[null,"Remote"],
 "Text\u0004about":[null,"About"],
+"Text\u0004settings":[null,"Settings"],
 "Text\u0004close":[null,"Close"],
-"Text\u0004no_movies":[null,"There are no movies in your library."]
+"Text\u0004no_movies":[null,"There are no movies in your library."],
+"Text\u0004no_channels":[null,"There are no channels available."]
 }
