@@ -13,7 +13,7 @@
 "Content-Transfer-Encoding":" 8bit",
 "Project-Id-Version":" XBMC_JQM"},
 
-"Label\u0004Back":[null,""],
+"Text\u0004back":[null,"Back"],
 "Text\u0004library":[null,"Library"],
 "Text\u0004music":[null,"Music"],
 "Text\u0004tv_shows":[null,"TV Shows"],
@@ -27,6 +27,15 @@
 "Text\u0004about":[null,"About"],
 "Text\u0004settings":[null,"Settings"],
 "Text\u0004close":[null,"Close"],
+"Text\u0004choose_language":[null,"Choose a language"],
 "Text\u0004no_movies":[null,"There are no movies in your library."],
+"Text\u0004no_shows":[null,"There are no TV Shows in you library.  Please scan your video sources from XBMC to add them."],
+"Text\u0004no_seasons":[null,"There are no seasons available for this show."],
+"Text\u0004no_episodes":[null,"There are no episodes available for this season."],
+"Text\u0004no_albums":[null,"There are no albums in your library."],
+"Text\u0004no_songs":[null,"There are no songs in this album."],
+"Text\u0004no_artists":[null,"There are no artists in your library."],
+"Text\u0004no_video_sources":[null,"There are no video sources defined in XBMC.  Please add them via XBMC first."],
+"Text\u0004no_music_sources":[null,"There are no music sources defined in XBMC.  Please add them via XBMC first."],
 "Text\u0004no_channels":[null,"There are no channels available."]
 }
