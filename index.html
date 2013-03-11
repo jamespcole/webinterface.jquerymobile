@@ -1012,7 +1012,7 @@
 			else
 			{
 				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">TV Shows</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_shows', 'Text') + '</li>';
 				for(var i = 0; i < result.tvshows.length; i++)
 				{
 					//forward slashes mess up the query string so replace them 
@@ -1062,7 +1062,7 @@
 			{
 				markup += '<div id="tv_show_info"><div id="tv_show_inner"></div></div>';
 				markup += "<ul data-role='listview' data-inset='true' id='show_season_list'>";
-				markup += '<li data-role="list-divider">Seasons</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_seasons', 'Text') + '</li>';
 				for(var i = 0; i < result.seasons.length; i++)
 				{
 					markup += '<li><a href="/#tvseason?season=' + result.seasons[i].season + '&tvshowid=' + tvshowid + '">' + result.seasons[i].label + '</a></li>';
@@ -1141,7 +1141,7 @@
 			{				
 				markup += '<div id="season_info_holder"><h2 id="season_label"></h2><img id="season_poster" /></div>';
 				markup += "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Episodes</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_episodes', 'Text') + '</li>';
 				for(var i = 0; i < result.episodes.length; i++)
 				{						
 					markup += '<li><a href="/#episode_info?episodeid=' + result.episodes[i].episodeid + '">' + result.episodes[i].label + '</a></li>';
@@ -1221,11 +1221,11 @@
 			markup += '<div class="episode_info">';
 			markup += '<div class="episode_info_inner">';
 			markup += "<h1>" + result.label + "</h1>";
-			markup += "<h2> Season " + result.season + " Episode " + result.episode + "</h2>";
+			markup += "<h2>" + xbmc_jqm.lang.get('tv_season', 'Text') + " " + result.season + " " + xbmc_jqm.lang.get('tv_episode', 'Text') + " " + result.episode + "</h2>";
 			markup += "<p>" + result.plot + "</p>";
 
-			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'episodeid\', itemId : ' + episodeid + ', onError : showError})" data-role="button" data-inline="true">Play Episode</a>';
-			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Episode</a>';
+			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'episodeid\', itemId : ' + episodeid + ', onError : showError})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('play_episode', 'Text') + '</a>';
+			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('queue_episode', 'Text') + '</a>';
 
 			markup += '</div>';
 			markup += '</div>';
@@ -1306,7 +1306,7 @@
 				if(artistid != undefined)
 					markup += '<div id="artist_info"><div id="artist_info_inner"></div></div>';
 				markup += "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Albums</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('albums', 'Text') + '</li>';
 				for(var i = 0; i < result.albums.length; i++)
 				{
 					var label = result.albums[i].label;
@@ -1384,7 +1384,7 @@
 			else
 			{
 				markup += "<ul data-role='listview' data-inset='true' class='album_songs'>";
-				markup += '<li data-role="list-divider">Tracks</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tracks', 'Text') + '</li>';
 				for(var i = 0; i < result.songs.length; i++)
 				{					
 					markup += '<li><a href="#song_options?song_id=' + result.songs[i].songid + '">' + ((result.songs[i].track < 6000) ? result.songs[i].track + ". " : '') + result.songs[i].label + '</a></li>';
@@ -1410,8 +1410,8 @@
 					markup += '<img src="' + xbmc.getThumbUrl(result.thumbnail) + '" />';
 				markup += '<h2>' + result.artist + '</h2>';
 				markup += '<h3>' + result.label + '</h3>';
-				markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Play Album</a>';
-				markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">Queue Album</a>';
+				markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('play_album', 'Text') + '</a>';
+				markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('queue_album', 'Text') + '</a>';
 				markup += '</div>'; //end album_info_inner
 				$('#album_info').html(markup);
 				content.find( ":jqmData(role=button)" ).button();
@@ -1475,7 +1475,7 @@
 			else
 			{
 				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Artists</li>';
+				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('artists', 'Text') + '</li>';
 				for(var i = 0; i < result.artists.length; i++)
 				{
 					markup += '<li><a href="#music_artist_albums?artistid=' + result.artists[i].artistid + '&artist_index=' + i + '">' + result.artists[i].label + '</a></li>';
@@ -1503,9 +1503,9 @@
 			$content = $page.find( ":jqmData(role=content)" );
 
 			var markup = '';
-			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Play Song</a>';
-			markup += '<a data-role="button" href="javascript:void(0)" onclick="addToPlayList({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">Queue Song</a>';
-			markup += '<a data-rel="back" data-role="button" href="#">Cancel</a>';
+			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">' + xbmc_jqm.lang.get('play_song', 'Text') + '</a>';
+			markup += '<a data-role="button" href="javascript:void(0)" onclick="addToPlayList({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">' + xbmc_jqm.lang.get('queue_song', 'Text') + '</a>';
+			markup += '<a data-rel="back" data-role="button" href="#">' + xbmc_jqm.lang.get('cancel', 'Text'); + '</a>';
 			
 			$content.html(markup);
 
@@ -1768,77 +1768,77 @@
 	
 </div>
 <div id="sourcelist" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 
 <div id="tvshows" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 <div id="tvseasons" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content" id="tv_show_content"></div>
 </div>
 <div id="tvseason" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content" id="season_content"></div>
 </div>
 <div id="episode_info" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content" id="episode_content"></div>
 </div>
 
 <!----MOVIES---->
 <div id="movies" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 <div id="movie" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content" id="movie_content"></div>
 </div>
 
 <div id="music" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content">
   	<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">
 		<li data-role="list-divider">XBMC</li>
-		<li><a href="#music_artists">Artist</a></li>
-		<li><a href="#music_albums">Album</a></li>
+		<li><a href="#music_artists" lang-id="artists">Artist</a></li>
+		<li><a href="#music_albums" lang-id="albums">Album</a></li>
 		<!--<li><a href="#music_genres">Genre</a></li>-->
 	</ul>
   </div>
 </div>
 
 <div id="music_albums" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1>Albums</h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1>Albums</h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 
 <div id="music_artist_albums" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div class="artist-info-div">
   	<div data-role="content"></div>
   </div>
 </div>
 
 <div id="music_album" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 
 <div id="music_artists" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=music" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 
 <div id="channel_groups" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 <div id="channels" data-role="page" data-add-back-btn="true" class="swipable">
-  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right">Options</a></div>
+  <div data-role="header"><h1></h1><a href="#global_options?category=video" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
   <div data-role="content"></div>
 </div>
 
@@ -1957,19 +1957,19 @@
 </div>
 
 <div id="song_options" data-role="dialog" data-add-back-btn="true">
-	<div data-role="header"><h1>Options</h1></div>
+	<div data-role="header"><h1 lang-id="options">Options</h1></div>
 	<div data-role="content">
 	</div>
 </div>
 
 <div id="global_options" data-role="dialog" data-add-back-btn="true">
-	<div data-role="header"><h1>Options</h1></div>
+	<div data-role="header"><h1 lang-id="options">Options</h1></div>
 	<div data-role="content">
-		<a data-role="button" href="/">Home</a>
-		<a data-role="button" href="#now_playing">Now Playing</a>
-		<a data-role="button" href="#remote">Remote</a>
-		<a data-role="button" id="playlist_button" href="#playlist">Playlist</a>
-		<a data-rel="back" data-role="button" href="#">Cancel</a>
+		<a data-role="button" href="/" lang-id="home">Home</a>
+		<!--<a data-role="button" href="#now_playing">Now Playing</a>-->
+		<a data-role="button" href="#remote" lang-id="remote">Remote</a>
+		<a data-role="button" id="playlist_button" href="#playlist" lang-id="playlist">Playlist</a>
+		<a data-rel="back" data-role="button" href="#" lang-id="cancel">Cancel</a>
 	</div>
 </div>
 
