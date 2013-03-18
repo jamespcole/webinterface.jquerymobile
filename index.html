@@ -64,30 +64,35 @@
 			}});				
 		}
 	}
-	
-		$('.music-link').live("tap", function(e)
+		/*$('.music-link').live("tap", function(e)
 		{
 			var file = $(e.target).attr('data-file');
 			xbmc.playAudioFile({file:file});
-		});
-		$('.music-link').live("taphold", function(e)
-		{
+		});*/
+		$('.music-link').live("tap", function(e)
+		{			
 			e.preventDefault();
 			var file = $(e.target).attr('data-file');
 			//forward slashes mess up the query string so replace them 
 			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#file_options?file=' + file + '&category=music', {transition: 'pop', role: 'dialog'}); 
-			 
+			//file = file.replace(/\//g, "\\");
+			var index = $(e.target).attr('data-index');
+
+			var folder = $(e.target).attr('data-folder');
+			//folder = folder.replace(/\//g, "\\");
+			//alert(folder);
+			//$.mobile.changePage('#file_options?file=' + file + '&category=music', {transition: 'pop', role: 'dialog'}); 
+			xbmc.addAndPlayAudiofolder({index:index, folder : folder});
 		});
 
 		//this is for the play button on the file option dialog
-		$('.play-music').live("tap", function(e)
+		/*$('.play-music').live("tap", function(e)
 		{
 			var file = $(this).attr('data-file');
 			console.log("Playing " + file);
 			xbmc.playAudioFile({file:file});
 			history.back();
+		
 			 
 		});
 
@@ -101,7 +106,7 @@
 			file = file.replace(/\//g, "\\");
 			$.mobile.changePage('#folder_options?file=' + file + '&category=music', {transition: 'pop', role: 'dialog'}); 
 			 
-		});
+		});*/
 
 		$('.music-folder').live("tap", function(e)
 		{
@@ -115,7 +120,7 @@
 			 
 		});
 
-		$('.play-music-folder').live("tap", function(e)
+		/*$('.play-music-folder').live("tap", function(e)
 		{
 			e.preventDefault();
 			var file = $(this).attr('data-file');
@@ -124,9 +129,9 @@
 			//console.log(file);
 			history.back();
 			 
-		});
+		});*/
 
-		$('.queue-music-folder').live("tap", function(e)
+		/*$('.queue-music-folder').live("tap", function(e)
 		{
 			e.preventDefault();
 			var file = $(this).attr('data-file');
@@ -135,9 +140,9 @@
 			//console.log(file);
 			history.back();
 			 
-		});
+		});*/
 	
-		$('.video-link').live("taphold", function(e)
+		/*$('.video-link').live("taphold", function(e)
 		{
 			e.preventDefault();
 			var file = $(e.target).attr('data-file');
@@ -157,9 +162,9 @@
 			xbmc.playVideoFile({file:file});
 			history.back();
 			 
-		});
+		});*/
 
-		$('.video-folder').live("taphold", function(e)
+		/*$('.video-folder').live("taphold", function(e)
 		{
 			e.preventDefault();
 			var file = $(e.target).attr('data-file');			
@@ -168,7 +173,7 @@
 			file = file.replace(/\//g, "\\");
 			$.mobile.changePage('#folder_options?file=' + file + '&category=video', {transition: 'pop', role: 'dialog'}); 
 			 
-		});
+		});*/
 
 		$('.video-folder').live("tap", function(e)
 		{
@@ -182,7 +187,7 @@
 			 
 		});
 
-		$('.play-video-folder').live("tap", function(e)
+		/*$('.play-video-folder').live("tap", function(e)
 		{
 			e.preventDefault();
 			var file = $(this).attr('data-file');
@@ -202,7 +207,7 @@
 			//console.log(file);
 			history.back();
 			 
-		});
+		});*/
 
 		$(document).on('tap', ".video-link", function(e)
 		{
@@ -211,12 +216,12 @@
 			xbmc.playVideoFile({file:file});
 		});
 
-		$('.queue-video').live("tap", function(e)
+		/*$('.queue-video').live("tap", function(e)
 		{
 			var file = $(this).attr('data-file');
 			debugLog(null, "Queueing " + file);
 			xbmc.addVideoFileToPlaylist({file: file, onError : showError});
-		});
+		});*/
 
 		$('.video-unqueue').live("tap", function(e)
 		{
@@ -235,12 +240,12 @@
 		});
 
 
-		$('.queue-music').live("tap", function(e)
+		/*$('.queue-music').live("tap", function(e)
 		{
 			var file = $(this).attr('data-file');
 			console.log("Queueing Music " + file);
 			xbmc.addAudioFileToPlaylist({file: file, onError : showError});
-		});
+		});*/
 
 		$('.playlist-item').live("tap", function(e)
 		{
@@ -771,8 +776,10 @@
 			var qs = $.parseQuerystring(urlObj.hash);
 			
 			var parent_file = getFile(qs['file']);
-			var category = qs['category'];		
+			var category = qs['category'];
+			var parent_folder = getFile(qs['file']);
 			var new_div_id = urlObj.hash.hashCode();
+
 			if($('#' + new_div_id).length == 0)
 			{
 				var new_div = $('<div id="' + new_div_id + '" data-role="page" data-add-back-btn="true" class="file-list swipable"></div>');
@@ -798,7 +805,7 @@
 				}
 				else
 				{
-					markup += '<li><a class="' + category + '-link" href="javascript:void(0)" data-file="' + result.files[i].file + '">' + result.files[i].label + '</a></li>';
+					markup += '<li><a class="' + category + '-link" href="javascript:void(0)" data-index="' + i + '" data-file="' + result.files[i].file + '" data-folder="' + parent_folder + '">' + result.files[i].label + '</a></li>';
 				}
 				
 			}

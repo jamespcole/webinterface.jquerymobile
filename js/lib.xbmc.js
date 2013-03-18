@@ -1713,6 +1713,25 @@ var xbmc = {};
       );
     },
 
+    /*this was added to replicate the functionality of the real XBMC interface
+    when playing an audio file it clears the current audio playlist then adds 
+    the current folder to the playlist then starts the selected file in playlist*/
+    addAndPlayAudiofolder: function(options) {
+      var settings = {
+        onSuccess: null,
+        onError: null,
+        index: 0,
+        folder: null
+      };
+      $.extend(settings, options);
+      xbmc.clearAudioPlaylist({onSuccess : function(result) {
+        xbmc.addAudioFolderToPlaylist({folder : settings.folder, onSuccess: function(result) {
+          xbmc.playlistPlay({item: settings.index, playlistid : 0, onSuccess: settings.onSuccess})
+        }});
+      }});
+      
+    },
+
     swapAudioPlaylist: function(options) {
       var settings = {
         plFrom: '0',
@@ -1857,12 +1876,20 @@ var xbmc = {};
             file: settings.file,
 
             onSuccess: function() {
-              xbmc.playAudio({
+
+                //adde by jamespcole
+                xbmc.sendCommand(
+                    '{"jsonrpc": "2.0", "method": "Player.Open", "params" : { "item" : { "file" : "' + settings.file + '"} }, "id": 0}',
+                    settings.onSuccess,
+                    settings.onError
+                );
+
+              /*xbmc.playAudio({
                 onSuccess: settings.onSuccess,
                 onError: function(errorText) {
                   settings.onError(errorText);
                 }
-              });
+              });*/
             },
 
             onError: function() {
