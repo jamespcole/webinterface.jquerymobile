@@ -10,6 +10,15 @@
 	
 	<script src="js/jquerymobile/jquery-1.8.2.min.js"></script>
 	<script src="js/jquerymobile/jquery.mobile-1.2.0.min.js"></script>
+	<script src="js/functions.js"></script>
+	<script src="js/routes.js"></script>
+	<script src="js/tv_shows.js"></script>
+	<script src="js/music.js"></script>
+	<script src="js/movies.js"></script>
+	<script src="js/playlist.js"></script>
+	<script src="js/files.js"></script>
+	<script src="js/remote.js"></script>
+	<script src="js/pvr.js"></script>
 	<script src="js/jed.js"></script>
 	<script src="js/lang.js"></script>
 	<script src="js/lib.xbmc.js"></script>
@@ -19,1728 +28,259 @@
 	<script type="text/javascript">
 	var useCaching = true;//cache large file lists - this speeds up load times
 	var volume = 0; //set initial volume - this will be updated volumeChanged function called by the volumeChangedListener
-	var debug = true;
-
-	function debugLog(obj, message)
-	{
-		if(debug)
-		{
-			if(message != '')
-				console.log(message);
-			if(obj != 'undefined')
-				console.log(obj);
-		}
-	}
-
-	//this function is so that if we queue something and the playlist is empty it will start automatically
-	function addToPlayList(options)
-	{
-		if(options.playlistid == undefined || options.playlistid == 0)
-		{
-			xbmc.getAudioPlaylist({onSuccess : function(result) {
-				var startPlaylist = false;
-				if(!result.items)
-				{
-					startPlaylist = true;
-					options.onSuccess = function(result) {
-						xbmc.playlistPlay({item: 0});
-					};
-				}
-				xbmc.playlistAdd(options);
-			}});				
-		}
-		else
-		{
-			xbmc.getVideoPlaylist({onSuccess : function(result) {
-				var startPlaylist = false;
-				if(!result.items)
-				{
-					startPlaylist = true;
-					options.onSuccess = function(result) {
-						xbmc.playlistPlay({item: 0, playlistid : options.playlistid});
-					};
-				}
-				xbmc.playlistAdd(options);
-			}});				
-		}
-	}
-		/*$('.music-link').live("tap", function(e)
-		{
-			var file = $(e.target).attr('data-file');
-			xbmc.playAudioFile({file:file});
-		});*/
-		$('.music-link').live("tap", function(e)
-		{			
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			//file = file.replace(/\//g, "\\");
-			var index = $(e.target).attr('data-index');
-
-			var folder = $(e.target).attr('data-folder');
-			//folder = folder.replace(/\//g, "\\");
-			//alert(folder);
-			//$.mobile.changePage('#file_options?file=' + file + '&category=music', {transition: 'pop', role: 'dialog'}); 
-			xbmc.addAndPlayAudiofolder({index:index, folder : folder});
-		});
-
-		//this is for the play button on the file option dialog
-		/*$('.play-music').live("tap", function(e)
-		{
-			var file = $(this).attr('data-file');
-			console.log("Playing " + file);
-			xbmc.playAudioFile({file:file});
-			history.back();
-		
-			 
-		});
-
-		$('.music-folder').live("taphold", function(e)
-		{
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//console.log(file);
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#folder_options?file=' + file + '&category=music', {transition: 'pop', role: 'dialog'}); 
-			 
-		});*/
-
-		$('.music-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//console.log(file);
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#filelist?file=' + file + '&category=music'); 
-			 
-		});
-
-		/*$('.play-music-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(this).attr('data-file');
-			console.log("playing " + file);
-			xbmc.playAudioFolder({folder: file, onError : showError});
-			//console.log(file);
-			history.back();
-			 
-		});*/
-
-		/*$('.queue-music-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(this).attr('data-file');
-			console.log(file);
-			xbmc.addAudioFolderToPlaylist({folder: file, onError : showError});
-			//console.log(file);
-			history.back();
-			 
-		});*/
 	
-		/*$('.video-link').live("taphold", function(e)
+
+	$(document).ready(function() {
+		//see if the language cookie is set and if not set it
+		var lang_code = $.cookie('language');
+		if(lang_code == undefined)
 		{
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//console.log(file);
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#file_options?file=' + file + '&category=video', {transition: 'pop', role: 'dialog'}); 
-			 
-		});
-
-		//this is for the play button on the file option dialog
-		$('.play-video').live("tap", function(e)
-		{
-			var file = $(this).attr('data-file');
-			console.log("Playing " + file);
-			xbmc.playVideoFile({file:file});
-			history.back();
-			 
-		});*/
-
-		/*$('.video-folder').live("taphold", function(e)
-		{
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');			
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#folder_options?file=' + file + '&category=video', {transition: 'pop', role: 'dialog'}); 
-			 
-		});*/
-
-		$('.video-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(e.target).attr('data-file');
-			//console.log(file);
-			//forward slashes mess up the query string so replace them 
-			//and change back later(even though they are valid jqmobile doesn't like them)
-			file = file.replace(/\//g, "\\");
-			$.mobile.changePage('#filelist?file=' + file + '&category=video'); 
-			 
-		});
-
-		/*$('.play-video-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(this).attr('data-file');
-			//console.log($(e.target).closest('a').parent().html());
-			xbmc.playVideoFolder({folder: file, onError : showError});
-			//console.log(file);
-			history.back();
-			 
-		});
-
-		$('.queue-video-folder').live("tap", function(e)
-		{
-			e.preventDefault();
-			var file = $(this).attr('data-file');
-			console.log(file);
-			xbmc.addVideoFolderToPlaylist({folder: file, onError : showError});
-			//console.log(file);
-			history.back();
-			 
-		});*/
-
-		$(document).on('tap', ".video-link", function(e)
-		{
-			var file = $(this).attr('data-file');
-			debugLog(null, "Playing " + file);
-			xbmc.playVideoFile({file:file});
-		});
-
-		/*$('.queue-video').live("tap", function(e)
-		{
-			var file = $(this).attr('data-file');
-			debugLog(null, "Queueing " + file);
-			xbmc.addVideoFileToPlaylist({file: file, onError : showError});
-		});*/
-
-		$('.video-unqueue').live("tap", function(e)
-		{
-			var xbmc_index = $(this).attr('xbmc-index');
-			console.log("Removing " + xbmc_index);
-			xbmc.removeVideoPlaylistItem({item : xbmc_index});
-			history.back();
-		});
-
-		$('.music-unqueue').live("tap", function(e)
-		{
-			var xbmc_index = $(this).attr('xbmc-index');
-			console.log("Removing " + xbmc_index);
-			xbmc.removeAudioPlaylistItem({item : xbmc_index, onError : showError});
-			history.back();
-		});
-
-
-		/*$('.queue-music').live("tap", function(e)
-		{
-			var file = $(this).attr('data-file');
-			console.log("Queueing Music " + file);
-			xbmc.addAudioFileToPlaylist({file: file, onError : showError});
-		});*/
-
-		$('.playlist-item').live("tap", function(e)
-		{
-			e.preventDefault();
-			var index = $(e.target).attr('xbmc-index');
-			var category = $(e.target).attr('xbmc-category');
-			
-			$.mobile.changePage('#playlist_options?index=' + index + '&category=' + category, {transition: 'pop', role: 'dialog'}); 
-		});		
-
-		$('.play-playlist-item').live("tap", function(event) {	
-				var category = 	$(this).attr('xbmc-category');
-				var index = $(this).attr('xbmc-index');
-				
-				if(category == "music" || category == "audio")	
-					xbmc.playlistPlay({item: index});
-				else if(category == "video")	
-					xbmc.playlistPlay({item: index, playlistid : 1, onError: showError})
-				history.back();
-			});
-		
-		$(document).ready(function() {
-			//see if the language cookie is set and if not set it
-			var lang_code = $.cookie('language');
-			if(lang_code == undefined)
+			lang_code = "en";
+			$.cookie('language', 'en', { expires: 10000 });
+		}
+		//this builds the language menu in settings
+		xbmc_jqm.lang.getLanguages(function (result) {
+			debugLog(result, "Checking languages");	
+			var lang_menu = $('#languages');
+			var markup = '<fieldset data-role="controlgroup">';
+			markup += '<legend lang-id="choose_language">' + xbmc_jqm.lang.get('choose_language', 'Text') + ':</legend>';
+			for(var i = 0; i < result.length; i++)
 			{
-				lang_code = "en";
-				$.cookie('language', 'en', { expires: 10000 });
+				var checked = '';
+				if(result[i].code == lang_code)
+					checked = 'checked="true"';
+				markup += '<input type="radio" class="language-radio" name="radio-choice" id="radio-' + result[i].code + '" value="' + result[i].code + '" ' + checked + ' />';
+				markup += '<label for="radio-' + result[i].code + '">' + result[i].Language + '</label>';					
 			}
-			//this builds the language menu in settings
-			xbmc_jqm.lang.getLanguages(function (result) {
-				debugLog(result, "Checking languages");	
-				var lang_menu = $('#languages');
-				var markup = '<fieldset data-role="controlgroup">';
-				markup += '<legend lang-id="choose_language">' + xbmc_jqm.lang.get('choose_language', 'Text') + ':</legend>';
-				for(var i = 0; i < result.length; i++)
-				{
-					var checked = '';
-					if(result[i].code == lang_code)
-						checked = 'checked="true"';
-					markup += '<input type="radio" class="language-radio" name="radio-choice" id="radio-' + result[i].code + '" value="' + result[i].code + '" ' + checked + ' />';
-					markup += '<label for="radio-' + result[i].code + '">' + result[i].Language + '</label>';					
-				}
-				markup += '</fieldset>';
-				lang_menu.html(markup);
-			});
+			markup += '</fieldset>';
+			lang_menu.html(markup);
+		});
 
-			$(document).on('change', ".language-radio", function() {				
-				$.cookie('language', $(this).val(), { expires: 10000 });
-				setLanguage();
-			});	
-
+		$(document).on('change', ".language-radio", function() {				
+			$.cookie('language', $(this).val(), { expires: 10000 });
 			setLanguage();
+		});	
 
+		setLanguage();
 
-			xbmc.periodicUpdater.addVolumeChangedListener(volumeChanged);
-			xbmc.periodicUpdater.addPlayerStatusChangedListener(statusChanged);
-			xbmc.periodicUpdater.addCurrentlyPlayingChangedListener(playingChanged);
-			xbmc.periodicUpdater.addProgressChangedListener(progressChanged);
-			xbmc.periodicUpdater.start();
-			//check if PVR is enabled
-			var bools = new Array();
-			bools[0] = "System.HasPVR";
-			bools[1] = "pvrmanager.enabled";
-			xbmc.getInfoBooleans({bool : bools, onSuccess: function(result) {
-				debugLog(result, "Checking if PVR is enabled");
-				if(result["System.HasPVR"] == false)
+		//set up the event listeners for XBMC events
+		xbmc.periodicUpdater.addVolumeChangedListener(volumeChanged);
+		xbmc.periodicUpdater.addPlayerStatusChangedListener(statusChanged);
+		xbmc.periodicUpdater.addCurrentlyPlayingChangedListener(playingChanged);
+		xbmc.periodicUpdater.addProgressChangedListener(progressChanged);
+		xbmc.periodicUpdater.start();
+
+		//check if PVR is enabled
+		var bools = new Array();
+		bools[0] = "System.HasPVR";
+		bools[1] = "pvrmanager.enabled";
+		xbmc.getInfoBooleans({bool : bools, onSuccess: function(result) {
+			debugLog(result, "Checking if PVR is enabled");
+			if(result["System.HasPVR"] == false)
+				$('#PVR_menu_item').hide();
+			else
+				xbmc.pvrGetChannelGroups({onSuccess: function(result) {}, onError : function(error) {
 					$('#PVR_menu_item').hide();
-				else
-					xbmc.pvrGetChannelGroups({onSuccess: function(result) {}, onError : function(error) {
-						$('#PVR_menu_item').hide();
-					}});	
-			}});
+				}});	
+		}});
 
-			function setLanguage()
-			{
-				var lang_code = $.cookie('language');
-				xbmc_jqm.lang.setLanguage(lang_code, function(ok) {
-					debugLog(ok, "Language Set to " + lang_code);
-					if(ok)
-					{
-						$('[lang-id]').each(function(index){
-							if($(this).children().size() > 0) {
-								//this is because after JQM does it's thing it may have added child elements
-								$(this).find("[class$='-text']").html(xbmc_jqm.lang.get($(this).attr('lang-id'), 'Text'));
-							}
-							else {
-						    	$(this).html(xbmc_jqm.lang.get($(this).attr('lang-id'), 'Text'));
-						    }
-						});
-
-						$.mobile.page.prototype.options.backBtnText = xbmc_jqm.lang.get('back', 'Text');
-					}
-				});
-			}
-
-			/* $(".swipable").live('swiperight', function() {
-				history.back();
-			  });
-			$(".swipable").live('swipeleft', function() {
-				history.forward();
-			  });*/
-
-			$(document).on('click', ".play-toggle", function() {
-				xbmc.control({'type' : 'play', onSuccess : togglePlayPauseButton})
-			});
-
-			$(document).on('click', ".prev-button", function() {
-				if(currentPlayType == "audio")
-					xbmc.playerGoTo({to : 'previous'});
-				else
-					xbmc.seek({"value" : "smallbackward"});
-			});
-			$(document).on('click', ".next-button", function() {
-				if(currentPlayType == "audio")
-					xbmc.playerGoTo({to : 'next'});
-				else
-					xbmc.seek({"value" : "smallforward"});
-			});
-			//document.oncontextmenu = function() {return false;};
-			$.mobile.changePage(document.location.hash);
-			$.mobile.loading( 'hide' );			
-		});
-
-		function togglePlayPauseButton()
-		{
-			if(!xbmc.isUsingWebSocket)
-			{
-				$(".play-toggle").each(function(index, value) { 
-				   if($(this).hasClass("play-button"))
-					{
-						console.log("toggling to pause button");
-						$(this).removeClass("play-button");
-						$(this).addClass("pause-button");
-						currentStatus = "playing";
-					}
-					else
-					{
-						console.log("toggling to play button");
-						$(this).removeClass("pause-button");
-						$(this).addClass("play-button");
-						currentStatus = "paused";
-					}
-				});
-			}
-		}
-		//keeps track of the currently playing type
-		var currentPlayType = '';
-		function playingChanged(file)
-		{
-			debugLog(file, "Playing Changed");
-			$('.now_playing_name').html(file.label);
-			if(file.thumbnail != '')
-			{
-				$('.now_playing_thumbnail').attr("src", xbmc.getThumbUrl(file.thumbnail));
-				$('.now_playing_thumbnail').show()
-			}
-			else
-				$('.now_playing_thumbnail').hide();
-			//show selected class for currently playing playlist item
-			$('.playlist-item').closest('li').attr("data-theme", "c").removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
-			$('.playlist-item[xbmc-label="' + file.label + '"]').closest('li').attr("data-theme", "a").removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
-			if(file.label == '')
-			{
-				$('.now-playing').slideUp();
-			
-				$('.play-toggle').addClass("play-button");
-				$('.play-toggle').removeClass("pause-button");
-			}
-			else
-			{
-				$('.now-playing').slideDown();
-
-				$('.play-toggle').removeClass("play-button");
-				$('.play-toggle').addClass("pause-button");
-			}
-			currentPlayType = file.xbmcMediaType;			
-		}
-
-		var last_progress = null;//for non websocket supported browsers
-		var progress_timeout = null;//for non websocket supported browsers
-		function progressChanged(progress)
-		{
-			//for non websocket supported browsers
-			if(progress_timeout != null)
-				clearTimeout(progress_timeout);
-
-			last_progress = progress;
-			//debugLog(progress, "Progress Update");
-			$('.now_playing_time').html(getTimeString(progress.time) + " / " + getTimeString(progress.total));
-			//if not using web sockets update the time every second
-			if(!xbmc.isUsingWebSocket && currentStatus == 'playing')
-			{
-				progress_timeout = setTimeout(function() {
-					last_progress.time++;
-					if(last_progress.time < progress.total)
-						progressChanged(last_progress)
-				}, 1000);
-			}
-		}
-
-		var currentStatus = "playing";
-		function statusChanged(status)
-		{			
-			currentStatus = status;
-			debugLog(status, "New Status");
-			if(status == 'stopped')
-			{
-				$('.now-playing').slideUp();
-				currentPlayType = '';
-				$('.play-toggle').addClass("play-button");
-				$('.play-toggle').removeClass("pause-button");
-			}
-			if(status == 'playing')
-			{
-				$('.play-toggle').removeClass("play-button");
-				$('.play-toggle').addClass("pause-button");
-				$('.now-playing').slideDown();
-			}
-			if(status == 'paused')
-			{
-				$('.play-toggle').addClass("play-button");
-				$('.play-toggle').removeClass("pause-button");
-			}
-		}
-
-		$(document).on('pageinit', "#remote", function() {
-			
-			$( "#volume" ).val(volume);
-			$( "#volume" ).slider("refresh");
-            $( "#volume" ).bind( "slidestop", function(event, ui) {                		
-				xbmc.setVolume({volume:$(event.target).val()});
-			});
-
-			$('.xbmc-input').bind("click", function(event) {				
-				xbmc.input({type: $(this).attr('xbmc-input')})
-			});
-
-			$('.xbmc-player').bind("click", function(event) {				
-				xbmc.control({type: $(this).attr('xbmc-control')})
-			});			
-	     });
-
-		$(document).on('pageinit', "#now_playing", function() {
-			
-			$( "#volume_np" ).val(volume);
-			$( "#volume_np" ).slider("refresh");
-                	$( "#volume_np" ).bind( "slidestop", function(event, ui) {
-				xbmc.setVolume({volume:$(event.target).val()});
-			});
-
-            $('.xbmc-input').bind("click", function(event) {				
-				xbmc.input({type: $(this).attr('xbmc-input')})
-			});
-
-			$('.xbmc-player').bind("click", function(event) {				
-				xbmc.control({type: $(this).attr('xbmc-control')})
-			});
-	     });
-
-		function volumeChanged(vol)
-		{
-			volume = vol;
-			
-			$( ".volume" ).val(volume);
-			try
-			{
-				$( ".volume" ).slider("refresh");
-			}
-			catch(ex)
-			{
-
-			}
-		}
-
-	String.prototype.hashCode = function(){
-	    var hash = 0;
-	    if (this.length == 0) return hash;
-	    for (i = 0; i < this.length; i++) {
-		char = this.charCodeAt(i);
-		hash = ((hash<<5)-hash)+char;
-		hash = hash & hash; // Convert to 32bit integer
-	    }
-	    return hash;
-	}
-
-	function getTimeString(time)
+		//document.oncontextmenu = function() {return false;};
+		$.mobile.changePage(document.location.hash);
+		$.mobile.loading( 'hide' );		
+	});
+	//set the current language based on the value of the 
+	// cookie "language"
+	function setLanguage()
 	{
-		var minutes = Math.floor(time / 60);		
+		var lang_code = $.cookie('language');
+		xbmc_jqm.lang.setLanguage(lang_code, function(ok) {
+			debugLog(ok, "Language Set to " + lang_code);
+			if(ok)
+			{
+				$('[lang-id]').each(function(index){
+					if($(this).children().size() > 0) {
+						//this is because after JQM does it's thing it may have added child elements
+						$(this).find("[class$='-text']").html(xbmc_jqm.lang.get($(this).attr('lang-id'), 'Text'));
+					}
+					else {
+				    	$(this).html(xbmc_jqm.lang.get($(this).attr('lang-id'), 'Text'));
+				    }
+				});
 
-		var seconds = time - minutes * 60;		
-
-		var hours = Math.floor(time / 3600);
-
-		return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-	}
-
-	function pad (str, max) {
-	  return (str+"").length < max ? pad("0" + str, max) : str;
-	}
-
-	//this is for parsing query strings out of the url because JQM doesn't do it automatically
-	jQuery.extend({
-		parseQuerystring: function(qs){
-		var nvpair = {};
+				$.mobile.page.prototype.options.backBtnText = xbmc_jqm.lang.get('back', 'Text');
+			}
+		});
+	}	
 		
-		if(qs.indexOf('?') > -1)
+
+	/* $(".swipable").live('swiperight', function() {
+		history.back();
+	  });
+	$(".swipable").live('swipeleft', function() {
+		history.forward();
+	  });*/	
+	/*****************************************************************
+	* XBMC Event handlers
+	*
+	*****************************************************************/
+		
+	//keeps track of the currently playing type
+	var currentPlayType = '';
+	function playingChanged(file)
+	{
+		debugLog(file, "Playing Changed");
+		$('.now_playing_name').html(file.label);
+		if(file.thumbnail != '')
 		{
-			var bits = qs.split("?");
-			if(bits.length > 1)
-				qs = bits[1];
-			else
-				qs = bits[0];
-			
+			$('.now_playing_thumbnail').attr("src", xbmc.getThumbUrl(file.thumbnail));
+			$('.now_playing_thumbnail').show()
 		}
-		var pairs = qs.split('&');
-		if(qs.indexOf('&') > -1)
+		else
+			$('.now_playing_thumbnail').hide();
+		//show selected class for currently playing playlist item
+		$('.playlist-item').closest('li').attr("data-theme", "c").removeClass('ui-btn-up-a').addClass('ui-btn-up-c');
+		$('.playlist-item[xbmc-label="' + file.label + '"]').closest('li').attr("data-theme", "a").removeClass('ui-btn-up-c').addClass('ui-btn-up-a');
+		if(file.label == '')
 		{
-			$.each(pairs, function(i, v){
-				var pair = v.split('=');
-				nvpair[pair[0]] = pair[1];
-			});
+			$('.now-playing').slideUp();
+		
+			$('.play-toggle').addClass("play-button");
+			$('.play-toggle').removeClass("pause-button");
 		}
 		else
 		{
-			var pair = qs.split('=');
-			if(pair.length > 1)
-				nvpair[pair[0]] = pair[1];
+			$('.now-playing').slideDown();
+
+			$('.play-toggle').removeClass("play-button");
+			$('.play-toggle').addClass("pause-button");
 		}
-		return nvpair;
+		currentPlayType = file.xbmcMediaType;			
+	}
+
+	var last_progress = null;//for non websocket supported browsers
+	var progress_timeout = null;//for non websocket supported browsers
+	function progressChanged(progress)
+	{
+		//for non websocket supported browsers
+		if(progress_timeout != null)
+			clearTimeout(progress_timeout);
+
+		last_progress = progress;
+		//debugLog(progress, "Progress Update");
+		$('.now_playing_time').html(getTimeString(progress.time) + " / " + getTimeString(progress.total));
+		//if not using web sockets update the time every second
+		if(!xbmc.isUsingWebSocket && currentStatus == 'playing')
+		{
+			progress_timeout = setTimeout(function() {
+				last_progress.time++;
+				if(last_progress.time < progress.total)
+					progressChanged(last_progress)
+			}, 1000);
 		}
-	});
-		$( document ).bind( "pageshow", function( event, data ){			
-			$.mobile.loading("hide");
+	}
+
+	var currentStatus = "playing";
+	function statusChanged(status)
+	{			
+		currentStatus = status;
+		debugLog(status, "New Status");
+		if(status == 'stopped')
+		{
+			$('.now-playing').slideUp();
+			currentPlayType = '';
+			$('.play-toggle').addClass("play-button");
+			$('.play-toggle').removeClass("pause-button");
+		}
+		if(status == 'playing')
+		{
+			$('.play-toggle').removeClass("play-button");
+			$('.play-toggle').addClass("pause-button");
+			$('.now-playing').slideDown();
+		}
+		if(status == 'paused')
+		{
+			$('.play-toggle').addClass("play-button");
+			$('.play-toggle').removeClass("pause-button");
+		}
+	}
+
+	$(document).on('pageinit', "#remote", function() {
+		
+		$( "#volume" ).val(volume);
+		$( "#volume" ).slider("refresh");
+        $( "#volume" ).bind( "slidestop", function(event, ui) {                		
+			xbmc.setVolume({volume:$(event.target).val()});
 		});
 
-		//this is for handling dynamically generated pages, see http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html
-		$(document).bind( "pagebeforechange", function( e, data ) {
-
-			$.mobile.loading( 'show' );
-			if ( typeof data.toPage === "string" ) {
-				console.log(data);
-
-				var u = $.mobile.path.parseUrl( data.toPage );
-				pageSelector = u.hash.replace( /\?.*$/, "" );
-				debugLog(pageSelector, '');
-				
-				if(pageSelector == "#sourcelist")
-				{
-					showSourceList( u, data.options );
-					e.preventDefault();
-				}
-				else if(pageSelector == "#filelist")
-				{						
-					showFileList( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#playlist")
-				{						
-					showPlaylist( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#file_options")
-				{						
-					showFileOptions( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#folder_options")
-				{						
-					showFolderOptions( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#playlist_options")
-				{						
-					showPlaylistOptions( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#tvshows")
-				{						
-					showTVShows( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#tvseasons")
-				{			
-					showTVSeasons( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#tvseason")
-				{			
-					showTVSeason( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#music_albums" || pageSelector == "#music_artist_albums")
-				{			
-					showAlbums( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#music_album")
-				{			
-					showAlbum( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#music_artists")
-				{			
-					showArtists( u, data.options);						
-					e.preventDefault();						
-				}
-				else if(pageSelector == "#episode_info")
-				{
-					showEpisodeInfo( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#song_options")
-				{
-					showSongOptions( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#global_options")
-				{
-					renderGlobalOptions( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#channels")
-				{
-					showChannels( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#channel_groups")
-				{
-					showChannelGroups( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#movies")
-				{
-					showMovies( u, data.options);						
-					e.preventDefault();
-				}
-				else if(pageSelector == "#movie")
-				{
-					showMovie( u, data.options);						
-					e.preventDefault();
-				}
-			}
+		$('.xbmc-input').bind("click", function(event) {				
+			xbmc.input({type: $(this).attr('xbmc-input')})
 		});
 
-		function showSourceList( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-						
-			var categoryName = qs['category'];
-			if ( categoryName ) 
-			{
-				xbmc.getSources({media:categoryName, onSuccess: function(result) {
-						renderSourceList(result, urlObj, options)
-					}
-				});
-			}
-		}
+		$('.xbmc-player').bind("click", function(event) {				
+			xbmc.control({type: $(this).attr('xbmc-control')})
+		});			
+     });
 
-		function renderSourceList(result, urlObj, options)
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var category = qs['category'];
-			debugLog(result, "Loading " + category + " sources");
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			var markup = '';			
-			if(result.limits.total == 0 || result.sources.length == 0)
-			{
-				//markup = "There are no " + category + " sources defined in XBMC.  Please add them via XBMC first."
-				markup = xbmc_jqm.lang.get('no_' + category + '_sources', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
-				for(var i = 0; i < result.sources.length; i++)
-				{
-					//forward slashes mess up the query string so replace them 
-					//and change back later(even though they are valid jqmobile doesn't like them)
-					file = result.sources[i].file.replace(/\//g, "\\");
-					markup += '<li><a href="/#filelist?file=' + escape(file) + '&category=' + category + '">' + result.sources[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
-
-		function showFileList( urlObj, options  )
-		{
-			$.mobile.showPageLoadingMsg();
-				
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			var category = qs['category'];			
-			
-			var file = getFile(qs['file']);
-			
-			var new_div_id = urlObj.hash.hashCode();
-			if(useCaching && $('#' + new_div_id).length > 0)
-			{				
-				var $page = $( '#' + new_div_id );
-				options.dataUrl = urlObj.href;
-				$.mobile.changePage( $page, options );
-			}
-			else
-			{
-				xbmc.getDirectory({directory: file, media:category, onError:showError, onSuccess: function(result) {
-					  	renderFileList(result, urlObj, options)
-					}
-				});
-			}
-			
-		}
-
-		function renderFileList(result, urlObj, options)
-		{			
-			$.mobile.showPageLoadingMsg();
-			debugLog(result, "Loading file list");
-			var qs = $.parseQuerystring(urlObj.hash);
-			
-			var parent_file = getFile(qs['file']);
-			var category = qs['category'];
-			var parent_folder = getFile(qs['file']);
-			var new_div_id = urlObj.hash.hashCode();
-
-			if($('#' + new_div_id).length == 0)
-			{
-				var new_div = $('<div id="' + new_div_id + '" data-role="page" data-add-back-btn="true" class="file-list swipable"></div>');
-				var heading = "Music";
-				if(category == "video")
-					heading = "Videos";
-				new_div.append(getHeaderBar(heading, category));
-				new_div.append('<div data-role="content"></div>');
-				$('body').append(new_div);
-			}
-			
-			var $page = $( '#' + new_div_id );
-			$content = $page.children( ":jqmData(role=content)" );
-						
-			var markup = "<ul data-role='listview' data-inset='true'>";
-			markup += '<li data-role="list-divider">XBMC</li>';
-			for(var i = 0; i < result.files.length; i++)
-			{
-				file = result.files[i].file.replace(/\//g, "\\");
-				if(result.files[i].filetype == "directory")
-				{
-					markup += '<li><a class="' + category + '-folder" href="javascript:void(0)" xbmc-href="/#filelist?file=' + escape(file) + '&category=' + category + '" data-file="' + result.files[i].file + '">' + result.files[i].label + '</a></li>';
-				}
-				else
-				{
-					markup += '<li><a class="' + category + '-link" href="javascript:void(0)" data-index="' + i + '" data-file="' + result.files[i].file + '" data-folder="' + parent_folder + '">' + result.files[i].label + '</a></li>';
-				}
-				
-			}
-			markup += "</ul>";
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-						
-			$.mobile.changePage( $page, options );
-		}
-
-		function getHeaderBar(heading, category)
-		{
-			var markup = '<div data-role="header">';			
-			markup += '<h1>' + heading + '</h1>';
-			markup += '<a href="#playlist?category=' + category + '" data-icon="check" class="ui-btn-right" data-transition="flip">Playlist</a>';
-			markup += '</div>';
-			return markup;
-		}
-
-		function getFile(url)
-		{			
-			return unescape(url).replace(/\\/g, "/");
-		}
-
-		function showError(err)
-		{
-			alert(err.error.message);
-			debugLog(null, err);
-			$.mobile.loading( 'hide' );
-		}
-
-		function showPlaylist(urlObj, options)
-		{			
-			var qs = $.parseQuerystring(urlObj.hash);
-			debugLog(null, "Loading playlist for " + currentPlayType);
-			if(qs['category'] == undefined)
-				qs['category'] = currentPlayType;
-			if(qs['category'] == "")
-				qs['category'] = "audio";
-			if(qs['category'] == "music" || qs['category'] == "audio")
-			{
-				xbmc.getAudioPlaylist({onSuccess : function(result) {
-						renderPlaylist(result, urlObj, options);
-					}
-				});
-			}
-			else if(qs['category'] == "video")
-			{
-				xbmc.getVideoPlaylist({onSuccess : function(result) {
-						renderPlaylist(result, urlObj, options);
-					}
-				});
-			}
-		}
-
-		function renderPlaylist(result, urlObj, options)
-		{
-			debugLog(result, "Playlist Data");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);	
-			if(qs['category'] == undefined)
-				qs['category'] = currentPlayType;
-			if(qs['category'] == "")
-				qs['category'] = "music";					
-			var category = qs['category'];
-			
-
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			var markup = '';
-			if(result.items)
-			{
-				markup = "<ul data-role='listview' data-inset='true' id='playlist_list'>";
-				markup += '<li data-role="list-divider">XBMC</li>';
-				for(var i = 0; i < result.items.length; i++)
-				{
-					markup += '<li><a href="javascript:void(0)" class="playlist-item" xbmc-category="' + category + '" xbmc-index="' + i + '" xbmc-label="' + result.items[i].label + '">' + result.items[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			else
-			{
-				markup = "Playlist is empty";
-			}
-			$content.html(markup);
-
-			if(category == "video")
-			{
-				$page.find( ":jqmData(role=header) h1" ).html("Video Playlist");
-				$page.find( ":jqmData(role=header) a.ui-btn-right").attr("href", "#playlist?category=music");
-				$page.find( "#change_playlist_btn_text").html("Music Playlist");
-			}
-			else if(category == "music")
-			{
-				$page.find( ":jqmData(role=header) h1" ).html("Audio Playlist");
-				$page.find( ":jqmData(role=header) a.ui-btn-right").attr("href", "#playlist?category=video");
-				$page.find( "#change_playlist_btn_text").html("Video Playlist");
-			}
-			else
-				$page.find( ":jqmData(role=header) h1" ).html("Playlist");			
-
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();			
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-			$.mobile.loading("hide");
-		}
-
-		function showFileOptions( urlObj, options )
-		{										
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			var category = qs['category'];			
-			
-			var file = getFile(qs['file']);						
-			
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			markup = '<a data-role="button" class="play-' + category + '" data-file="' + file + '" href="javascript:void(0)">Play</a>';
-			markup += '<a data-role="button" class="queue-' + category + '" data-file="' + file + '" href="javascript:void(0)">Queue</a>';
-			markup += '<a data-rel="back" data-role="button" href="#">Close</a>';
-
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=button)" ).button();
-			options.role = "dialog";
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
-
-		function showFolderOptions( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);			
-			var category = qs['category'];
-			
-			var file = getFile(qs['file']);
-			
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			markup = '<a data-role="button" class="play-' + category + '-folder" data-file="' + file + '" href="javascript:void(0)">Play</a>';
-			markup += '<a data-role="button" class="queue-' + category + '-folder" data-file="' + file + '" href="javascript:void(0)">Queue</a>';
-			markup += '<a data-rel="back" data-role="button" href="#">Close</a>';
-
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=button)" ).button();
-			options.role = "dialog";
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
-		function showPlaylistOptions( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			if(qs['category'] == undefined)
-				qs['category'] = currentPlayType;
-			if(qs['category'] == "" || qs['category'] == "audio")
-				qs['category'] = "music";
-			var category = qs['category'];
-			
-			var index = getFile(qs['index']);			
-			
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			markup = '<a data-role="button" class="play-playlist-item" xbmc-category="' + category + '" xbmc-index="' + index + '" href="javascript:void(0)">Play</a>';
-			markup += '<a data-role="button" class="' + category + '-unqueue" xbmc-index="' + index + '" href="javascript:void(0)">Remove</a>';			
-			markup += '<a data-rel="back" data-role="button" href="#">Cancel</a>';
-
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=button)" ).button();
-			options.role = "dialog";
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
-
-		//TV SHOW STUFF
-		function showTVShows( urlObj, options )
-		{			
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			
-			xbmc.getTvShows({onSuccess: function(result) {
-					renderTVShowList(result, urlObj, options);
-				}
-			});	
-		}
-
-		function renderTVShowList(result, urlObj, options)
-		{			
-			debugLog(result, "Loading TV Shows");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var category = qs['category'];
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result.limits.total == 0 || result.tvshows.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_shows', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_shows', 'Text') + '</li>';
-				for(var i = 0; i < result.tvshows.length; i++)
-				{
-					//forward slashes mess up the query string so replace them 
-					//and change back later(even though they are valid jqmobile doesn't like them)
-					//file = result.tvshows[i].file.replace(/\//g, "\\");
-					markup += '<li><a href="/#tvseasons?tvshowid=' + result.tvshows[i].tvshowid + '">' + result.tvshows[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-
-			$.mobile.changePage( $page, options );			
-		}
-
-		function showTVSeasons( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var tvshowid = qs['tvshowid'];
-			
-			xbmc.getSeasons({tvshowid : tvshowid, onError: showError, onSuccess: function(result) {
-					renderTVSeasonsList(result, urlObj, options);
-				}
-			});	
-		}
-
-		function renderTVSeasonsList(result, urlObj, options)
-		{
-			debugLog(result, "Loading TV Seasons");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var tvshowid = qs['tvshowid'];
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result.limits.total == 0 || result.seasons.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_seasons', 'Text');
-			}
-			else
-			{
-				markup += '<div id="tv_show_info"><div id="tv_show_inner"></div></div>';
-				markup += "<ul data-role='listview' data-inset='true' id='show_season_list'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_seasons', 'Text') + '</li>';
-				for(var i = 0; i < result.seasons.length; i++)
-				{
-					markup += '<li><a href="/#tvseason?season=' + result.seasons[i].season + '&tvshowid=' + tvshowid + '">' + result.seasons[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);			
-			
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-
-			$.mobile.changePage( $page, options );
-
-			xbmc.getTvShowInfo({tvshowid : tvshowid, onError : showError, onSuccess: function(show_info) {
-				debugLog(show_info, "Loaded Show Info");
-				if(show_info.fanart != '')
-				{
-					$page.css("background", "url(" + xbmc.getThumbUrl(show_info.fanart) + ") no-repeat center center fixed");
-					$page.css("background-size", "cover");				
-					$content.find("ul").addClass("list-with-background");
-				}
-				else
-				{				
-					$page.css("background-image", "none");
-					$content.find("ul").removeClass("list-with-background");
-				}
-				var markup = '';
-				if(show_info.art != undefined && show_info.art.banner != undefined)
-				{
-					markup += '<img src="' + xbmc.getThumbUrl(show_info.art.banner) + '" />';
-					$('#tv_show_info').addClass('has-artwork');
-				}
-				else if(show_info.thumbnail != '')
-				{
-					markup += '<img src="' + xbmc.getThumbUrl(show_info.thumbnail) + '" />';
-					$('#tv_show_info').addClass('has-artwork');		
-				}
-				markup += '<h2>' + show_info.label + '</h2>';
-				markup += '<p>' + show_info.plot + '</p>';
-				$('#tv_show_inner').html(markup);
-			}});			
-		}
-
-		function showTVSeason( urlObj, options )
-		{			
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var tvshowid = qs['tvshowid'];
-			var season = qs['season'];
-			
-			xbmc.getEpisodes({item : 'tvshowid', itemId : tvshowid, season : season, onError: showError, onSuccess: function(result) {
-					renderTVSeasonList(result, urlObj, options)
-				}
-			});	
-		}
-
-		function renderTVSeasonList(result, urlObj, options)
-		{
-			debugLog(result, "Loading TV Season Episodes");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var tvshowid = qs['tvshowid'];
-			var season = qs['season'];
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result.limits.total == 0 || result.episodes.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_episodes', 'Text');
-			}
-			else
-			{				
-				markup += '<div id="season_info_holder"><h2 id="season_label"></h2><img id="season_poster" /></div>';
-				markup += "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tv_episodes', 'Text') + '</li>';
-				for(var i = 0; i < result.episodes.length; i++)
-				{						
-					markup += '<li><a href="/#episode_info?episodeid=' + result.episodes[i].episodeid + '">' + result.episodes[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-
-			
-			$.mobile.changePage( $page, options );
-			xbmc.getSeasons({tvshowid : tvshowid, onSuccess: function(seasons) {
-				debugLog(seasons, "Getting Season Poster");
-				//anoying but there is no function to just get the sepcific seson info
-				var s_index = -1;
-				for(var i = 0; i < seasons.seasons.length; i++)
-					if(seasons.seasons[i].season == season)
-						s_index = i;
-				if(s_index != -1 && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art.poster != undefined)
-				{
-					$('#season_poster').attr("src", xbmc.getThumbUrl(seasons.seasons[s_index].art.poster));
-					$('#season_info_holder').addClass("season-art");
-					$content.find("ul").addClass("has-season-art");
-				}
-				else	
-				{
-					$('#season_poster').hide();
-					$content.find("ul").removeClass("has-season-art");
-				}
-
-				if(s_index != -1 && seasons.seasons[s_index].art != undefined && seasons.seasons[s_index].art['tvshow.fanart'] != undefined)				
-				{
-					$page.css("background", "url(" + xbmc.getThumbUrl(seasons.seasons[s_index].art['tvshow.fanart']) + ") no-repeat center center fixed");
-					$page.css("background-size", "cover");	
-					$content.find("ul").addClass("list-with-background");
-				}
-				else
-				{				
-					$page.css("background-image", "none");
-					$content.find("ul").removeClass("list-with-background");
-				}
-				if(seasons.seasons[s_index] != undefined)				
-					$('#season_label').html(seasons.seasons[s_index].label);
-			}});				
-		}
-
-		function showEpisodeInfo( urlObj, options )
-		{	
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var episodeid = qs['episodeid'];			
-			
-			xbmc.getEpisodeDetails({episodeid : episodeid, onSuccess: function(result) {
-					renderEpisodeInfo(result, urlObj, options);
-				}
-			});
-		}
-
-		function renderEpisodeInfo(result, urlObj, options)
-		{
-			debugLog(result, "Loading Episode");
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			var episodeid = qs['episodeid'];
-			
-			var markup = '';
-			if(result.thumbnail != '')
-			{
-				markup += '<div class="episode_thumb"><div class="episode_thumb_inner">';
-				markup += '<img src="' + xbmc.getThumbUrl(result.thumbnail) + '" />';
-				markup += '</div></div>';
-			}
-			markup += '<div class="episode_info">';
-			markup += '<div class="episode_info_inner">';
-			markup += "<h1>" + result.label + "</h1>";
-			markup += "<h2>" + xbmc_jqm.lang.get('tv_season', 'Text') + " " + result.season + " " + xbmc_jqm.lang.get('tv_episode', 'Text') + " " + result.episode + "</h2>";
-			markup += "<p>" + result.plot + "</p>";
-
-			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'episodeid\', itemId : ' + episodeid + ', onError : showError})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('play_episode', 'Text') + '</a>';
-			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'episodeid\', itemId : ' + episodeid + ', playlistid: 1})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('queue_episode', 'Text') + '</a>';
-
-			markup += '</div>';
-			markup += '</div>';
-
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			$content.find( ":jqmData(role=button)" ).button();
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-
-			if(result.fanart != '')
-			{
-				$page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
-				$page.css("background-size", "cover");				
-			}
-			else
-			{				
-				$page.css("background-image", "none");
-			}
-		}
-
-		//declare this global so we don't have to make a second call to get the album info
-		var albums_loaded = false;
-		function showAlbums(urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var artistid = qs['artistid'];			
-			var genreid = qs['genreid'];
-						
-			if(artistid == undefined && genreid == undefined)
-			{
-				if(!albums_loaded || !useCaching)	
-					xbmc.getAlbums({onError : showError, onSuccess: function(result) {
-							renderAlbumList(result, urlObj, options)
-						}
-					});
-				else
-				{
-					$.mobile.loading( 'show' );
-					debugLog(null, "loading cached version of albums");
-					var $page = $( pageSelector );
-					$page.page();
-					$.mobile.changePage( $page, options );
-				}
-			}
-			else if(artistid != undefined)
-				xbmc.getAlbums({onError : showError, item : "artistid", itemId : artistid, onSuccess: function(result) {
-						renderAlbumList(result, urlObj, options)
-					}
-				});
-		}
+	$(document).on('pageinit', "#now_playing", function() {
 		
-		function renderAlbumList(result, urlObj, options)
-		{
-			debugLog(result, "Loading Albums");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var artistid = qs['artistid'];			
-			var genreid = qs['genreid'];
+		$( "#volume_np" ).val(volume);
+		$( "#volume_np" ).slider("refresh");
+            	$( "#volume_np" ).bind( "slidestop", function(event, ui) {
+			xbmc.setVolume({volume:$(event.target).val()});
+		});
 
-			if(artistid == undefined && genreid == undefined)
-				albums_loaded = true;
+        $('.xbmc-input').bind("click", function(event) {				
+			xbmc.input({type: $(this).attr('xbmc-input')})
+		});
 
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result == null || result.limits.total == 0 || result.albums.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_albums', 'Text');			
-			}
-			else
-			{	
-				if(artistid != undefined)
-					markup += '<div id="artist_info"><div id="artist_info_inner"></div></div>';
-				markup += "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('albums', 'Text') + '</li>';
-				for(var i = 0; i < result.albums.length; i++)
-				{
-					var label = result.albums[i].label;
-					if(pageSelector == "#music_albums")
-						label += " - " + result.albums[i].artist;
-					markup += '<li><a href="#music_album?albumid=' + result.albums[i].albumid + '">' + label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
+		$('.xbmc-player').bind("click", function(event) {				
+			xbmc.control({type: $(this).attr('xbmc-control')})
+		});
+     });
 
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-			if(artistid != undefined)
-				loadArtistInfo(artistid, $content, $page, false);
-		}
-
-		function loadArtistInfo(artistid, content, page, background_only)
-		{			
-			xbmc.getArtistDetails({onSuccess: function(result) {
-				debugLog(result, "Loaded artist info");
-				if(result.fanart != '')
-				{
-					page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
-					page.css("background-size", "cover");	
-					content.find("ul").addClass("list-with-background");
-				}
-				else
-				{				
-					page.css("background-image", "none");
-					content.find("ul").removeClass("list-with-background");
-				}
-				if(!background_only)
-				{
-					var info_div = page.find('#artist_info_inner');
-					var markup = '<h1 onclick="$(\'#artist_bio\').slideToggle()">' + result.label + "</h1>";
-					markup += '<p id="artist_bio">' + result.description + "</p>";
-					info_div.html(markup);	
-				}			
-			}, artistid : artistid});
-		}
-
-		function showAlbum(urlObj, options)
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var albumid = qs['albumid'];
-			
-			xbmc.getSongs({item : "albumid", itemId : albumid, onSuccess: function(result) {
-					renderAlbum(result, urlObj, options);
-				}
-			});	
-		}
-
-		function renderAlbum(result, urlObj, options)
-		{
-			debugLog(result, "Loading Album Songs");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);						
-			var albumid = qs['albumid'];
-			var album_index = qs['album_index'];
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '<div id="album_info" class="album_info"></div>';			
-			if(result.limits.total == 0 || result.songs.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_songs', 'Text');	
-			}
-			else
-			{
-				markup += "<ul data-role='listview' data-inset='true' class='album_songs'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('tracks', 'Text') + '</li>';
-				for(var i = 0; i < result.songs.length; i++)
-				{					
-					markup += '<li><a href="#song_options?song_id=' + result.songs[i].songid + '">' + ((result.songs[i].track < 6000) ? result.songs[i].track + ". " : '') + result.songs[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-			loadAlbumInfo(albumid, $content, $page);			
-		}
-
-		function loadAlbumInfo(albumid, content, page)
-		{
-			xbmc.getAlbumDetails({onSuccess: function(result){
-				debugLog(result, "Loading Album Info");
-				var markup = '<div class="album_info_inner">';
-				if(result.thumbnail != '')
-					markup += '<img src="' + xbmc.getThumbUrl(result.thumbnail) + '" />';
-				markup += '<h2>' + result.artist + '</h2>';
-				markup += '<h3>' + result.label + '</h3>';
-				markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('play_album', 'Text') + '</a>';
-				markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'albumid\', itemId : ' + albumid + '})" data-role="button" data-inline="true">' + xbmc_jqm.lang.get('queue_album', 'Text') + '</a>';
-				markup += '</div>'; //end album_info_inner
-				$('#album_info').html(markup);
-				content.find( ":jqmData(role=button)" ).button();
-				page.find( ":jqmData(role=header) h1" ).html(result.label);
-				if(result.artistid.length > 0)
-					loadArtistInfo(result.artistid[0], content, page, true);
-			}, onError: showError, albumid : albumid});
-		}		
-
-
-		//cache the artists
-		var artists = null;
-		function showArtists(urlObj, options)
-		{						
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );			
-			var qs = $.parseQuerystring(urlObj.hash);			
-			var genreid = qs['genreid'];			
-			
-			if(genreid == undefined)
-			{
-				if(artists == null || useCaching == false)	
-				{
-					xbmc.getArtists({onSuccess: function(result) { 
-							renderArtistList(result, urlObj, options);
-						}
-					});	
-				}
-				else
-				{					
-					$.mobile.loading( 'show' );
-					debugLog(artists, "loading cached version of artists");
-					var $page = $( pageSelector );
-					$page.page();
-					$.mobile.changePage( $page, options );
-				}
-			}
-			else if(genreid != undefined)
-			{
-				xbmc.getArtists({genreid : genreid, onSuccess: function(result) { 
-						renderArtistList(result, urlObj, options);
-					}
-				});	
-			}
-		}
+	function volumeChanged(vol)
+	{
+		volume = vol;
 		
-		function renderArtistList(result, urlObj, options)
+		$( ".volume" ).val(volume);
+		try
 		{
-			artists = result;
-			debugLog(result, "Loading Artists");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
+			$( ".volume" ).slider("refresh");
+		}
+		catch(ex)
+		{
 
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result == null || result.limits.total == 0 || result.artists.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_artists', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">' + xbmc_jqm.lang.get('artists', 'Text') + '</li>';
-				for(var i = 0; i < result.artists.length; i++)
-				{
-					markup += '<li><a href="#music_artist_albums?artistid=' + result.artists[i].artistid + '&artist_index=' + i + '">' + result.artists[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
+		}
+	}
+
+	//generic error handler which is passed into async calls to XBMC API
+	function showError(err)
+	{
+		alert(err.error.message);
+		debugLog(null, err);
+		$.mobile.loading( 'hide' );
+	}
+
+	//this shows the global list of options when the option button is pressed
+	function renderGlobalOptions( urlObj, options )
+	{
+		pageSelector = urlObj.hash.replace( /\?.*$/, "" );
 		
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
+		var qs = $.parseQuerystring(urlObj.hash);
 
-		function showSongOptions( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-			var songid = qs['song_id'];
-			debugLog(null, "options for song " + songid);
+		if(qs['category'] == undefined)
+			qs['category'] = currentPlayType;
+		if(qs['category'] == "" || qs['category'] == "audio")
+			qs['category'] = "music";
+		var category = qs['category'];			
 
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
+		var $page = $( pageSelector );
 
-			var markup = '';
-			markup += '<a data-role="button" href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">' + xbmc_jqm.lang.get('play_song', 'Text') + '</a>';
-			markup += '<a data-role="button" href="javascript:void(0)" onclick="addToPlayList({item : \'songid\', itemId : ' + songid + ', onSuccess: function(result) {history.back()}})">' + xbmc_jqm.lang.get('queue_song', 'Text') + '</a>';
-			markup += '<a data-rel="back" data-role="button" href="#">' + xbmc_jqm.lang.get('cancel', 'Text'); + '</a>';
-			
-			$content.html(markup);
-
-			$page.page();			
-			$content.find( ":jqmData(role=button)" ).button();
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}
-
+		$("#playlist_button").attr("href", "#playlist?category=" + category);
+		$page.page();
+		$.mobile.changePage( $page, options );
+	}
 		
-		//PVR
-
-		function showChannelGroups( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);			
-			
-			xbmc.pvrGetChannelGroups({onError : showError, onSuccess: function(result) {
-					renderChannelGroups(result, urlObj, options);
-				}
-			});
-		}
-
-		function renderChannelGroups(result, urlObj, options)
-		{
-			debugLog(result, "Channel Groups");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result == null || result.limits.total == 0 || result.channelgroups.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_channels', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Stations</li>';
-				for(var i = 0; i < result.channelgroups.length; i++)
-				{
-					markup += '<li><a href="#channels?channelgroupid=' + result.channelgroups[i].channelgroupid + '">' + result.channelgroups[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-		
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-		}		
-
-		function showChannels( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);			
-			var channelgroupid = qs['channelgroupid'];
-			
-			xbmc.pvrGetChannels({channelgroupid : channelgroupid, onSuccess: function(result) {
-					renderChannels(result, urlObj, options);
-				}
-			});
-		}
-
-
-		function renderChannels(result, urlObj, options)
-		{
-			debugLog(result, "Loading Channels");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-
-			var $page = $( pageSelector );
-			$content = $page.find( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result == null || result.limits.total == 0 || result.channels.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_channels', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Stations</li>';
-				for(var i = 0; i < result.channels.length; i++)
-				{
-					markup += '<li><a href="javascript:void()" onclick="xbmc.playerOpen({item : \'channelid\', itemId : ' + result.channels[i].channelid + '})">' + result.channels[i].label + '</a></li>';					
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-		
-			options.dataUrl = urlObj.href;
-			
-			$.mobile.changePage( $page, options );
-			/*for(var i = 0; i < result.channels.length; i++)
-			{
-				xbmc.pvrGetChannelDetails({channelid : result.channels[i].channelid, onSuccess : function(channel_details) {
-					debugLog(channel_details, "Channel Details");
-				}});
-			}*/
-
-		}
-
-		function renderGlobalOptions( urlObj, options )
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);
-
-			if(qs['category'] == undefined)
-				qs['category'] = currentPlayType;
-			if(qs['category'] == "" || qs['category'] == "audio")
-				qs['category'] = "music";
-			var category = qs['category'];			
-
-			var $page = $( pageSelector );
-
-			$("#playlist_button").attr("href", "#playlist?category=" + category);
-			$page.page();
-			$.mobile.changePage( $page, options );
-		}
-
-		/*movies*/
-		function showMovies(urlObj, options)
-		{
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			
-			var qs = $.parseQuerystring(urlObj.hash);			
-			
-			xbmc.getMovies({onError : showError, onSuccess: function(result) {
-					renderMovies(result, urlObj, options);
-				}
-			});
-		}
-
-		function renderMovies(result, urlObj, options)
-		{
-			debugLog(result, "Loading Movies");
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);			
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '';			
-			if(result.limits.total == 0 || result.movies.length == 0)
-			{
-				markup = xbmc_jqm.lang.get('no_movies', 'Text');
-			}
-			else
-			{
-				markup = "<ul data-role='listview' data-inset='true'>";
-				markup += '<li data-role="list-divider">Movies</li>';
-				for(var i = 0; i < result.movies.length; i++)
-				{			
-					markup += '<li><a href="/#movie?movieid=' + result.movies[i].movieid + '">' + result.movies[i].label + '</a></li>';
-				}
-				markup += "</ul>";
-			}
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			options.dataUrl = urlObj.href;
-
-			
-			$.mobile.changePage( $page, options );
-		}
-
-		function showMovie(urlObj, options)
-		{
-			var qs = $.parseQuerystring(urlObj.hash);			
-			
-			xbmc.getMovieInfo({onError : showError, movieid : qs['movieid'], onSuccess: function(result) {
-					renderMovie(result, urlObj, options);
-				}
-			});
-		}
-
-		function renderMovie(result, urlObj, options)
-		{			
-			pageSelector = urlObj.hash.replace( /\?.*$/, "" );
-			var qs = $.parseQuerystring(urlObj.hash);
-			debugLog(result, "Loading Movie " + qs['movieid']);	
-			movieid = qs["movieid"];
-
-			var $page = $( pageSelector );
-			$content = $page.children( ":jqmData(role=content)" );
-			
-			var markup = '<div class="movie-info-div">';
-			markup += '<div class="movie-info-div-inner">';
-			if(result.thumbnail != '')
-				markup += '<div class="movie-thumb-holder"><img class="movie_thumb" src="' + xbmc.getThumbUrl(result.thumbnail) + '" /></div>';
-			markup += '<div class="movie-info">';
-			markup += "<h1>" + result.label + "</h1>";
-			markup += "<h2> Year: " + result.year + ", Director: " + result.director + "</h2>";
-			markup += "<p>" + result.plot + "</p>";
-
-			markup += '<a href="javascript:void(0)" onclick="xbmc.playerOpen({item : \'movieid\', itemId : ' + movieid + ', onError : showError})" data-role="button" data-inline="true">Play Movie</a>';
-			markup += '<a href="javascript:void(0)" onclick="addToPlayList({item : \'movieid\', itemId : ' + movieid + ', playlistid: 1})" data-role="button" data-inline="true">Queue Movie</a>';
-			markup += "</div>";
-			markup += "</div>";
-			markup += "</div>";
-
-			$content.html(markup);
-			$page.page();
-			$content.find( ":jqmData(role=listview)" ).listview();
-			$content.find( ":jqmData(role=button)" ).button();
-			options.dataUrl = urlObj.href;
-			if(result.fanart != '')
-			{
-				$page.css("background", "url(" + xbmc.getThumbUrl(result.fanart) + ") no-repeat center center fixed");
-				$page.css("background-size", "cover");				
-			}
-			else
-			{				
-				$page.css("background-image", "none");
-			}
-			
-			$.mobile.changePage( $page, options );
-		}
 	</script>
 	
 </head> 
@@ -1768,11 +308,6 @@
 		</div>
 
 	</div>
-	
-	<!--<div data-role="footer" class="footer-docs" data-theme="c">
-			<p>&copy; 2013 James P. Cole</p>
-	</div>	-->
-	
 </div>
 <div id="sourcelist" data-role="page" data-add-back-btn="true" class="swipable">
   <div data-role="header"><h1></h1><a href="#global_options" data-transition="slidedown" data-role="button" data-icon="gear" class="ui-btn-right" lang-id="options">Options</a></div>
@@ -1937,7 +472,7 @@
 
 </div>
 
-<div id="file_options" data-role="dialog" data-add-back-btn="true">
+<!--<div id="file_options" data-role="dialog" data-add-back-btn="true">
 	<div data-role="header"><h1>Options</h1></div>
 	<div data-role="content">
 		<a data-role="button" href="javascript:void(0)">Play</a>
@@ -1955,7 +490,7 @@
 		<a data-rel="back" data-role="button" href="#">Cancel</a>
 	</div>
 
-</div>
+</div>-->
 
 <div id="playlist_options" data-role="dialog" data-add-back-btn="true">
 	<div data-role="header"><h1>Options</h1></div>
